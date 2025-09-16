@@ -14,7 +14,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(groups)
         
         self.image = pygame.transform.scale(
-            pygame.image.load('sprites/ghost.jpg').convert_alpha(),
+            pygame.image.load('sprites/skeleton.png').convert_alpha(),
             (100, 100)
         )
 
