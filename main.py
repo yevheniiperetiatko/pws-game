@@ -21,10 +21,15 @@ class Game():
 
         # generate enemies
         self.enemies = pygame.sprite.Group()
+
         for _ in range(10):
-            self.enemies.add(
-                Enemy(self.all_sprites, self.player)
-            )
+            self.enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png'))
+            self.enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png'))
+
+    def draw_all_rects(self):
+        # drawing all rects of sprites
+        for sprite in self.all_sprites:
+            pygame.draw.rect(self.display_surf, (0, 255, 0), sprite.rect) 
 
     def loop(self):
         while self.running:
@@ -39,8 +44,10 @@ class Game():
             self.display_surf.fill('WHITE')
             self.all_sprites.update(dt)
             
-            # drawing sprites
+            # drawing 
             self.all_sprites.draw(self.display_surf)
+            
+            # self.draw_all_rects()
 
             pygame.display.update()
         

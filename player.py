@@ -10,18 +10,19 @@ class Player(pygame.sprite.Sprite):
         
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/player.png').convert_alpha(),
-            (150, 150)
+            (80, 110)
         )
-        self.rect = self.image.get_frect(center=pos)
+
         self.pos = pos
 
+        self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
+        
         self.direction = pygame.math.Vector2()
         self.speed = 500
 
         self.was_flipped = False
 
     def input(self):
-        # TODO: create a better name
         self.keys = pygame.key.get_pressed()
 
         x_direction = int(self.keys[pygame.K_d]) - int(self.keys[pygame.K_a])
@@ -39,8 +40,6 @@ class Player(pygame.sprite.Sprite):
             if self.was_flipped == False:
                 self.image = pygame.transform.flip(self.image, True, False)
                 self.was_flipped = True
-
-        # print(int(self.keys[pygame.K_d]) - int(self.keys[pygame.K_a]))
 
     def move(self, dt):
         self.rect.center += self.direction * self.speed * dt

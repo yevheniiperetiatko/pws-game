@@ -8,18 +8,19 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(
         self, 
         groups,
-        target, 
-        pos=None
+        target,
+        image_name,
+        pos=None,
     ):
         super().__init__(groups)
         
         self.image = pygame.transform.scale(
-            pygame.image.load('sprites/skeleton.png').convert_alpha(),
-            (100, 100)
+            pygame.image.load(f'sprites/{image_name}').convert_alpha(),
+            (60, 80)
         )
 
         self.pos = pos if pos is not None else self.get_spawn_position()
-        self.rect = self.image.get_frect(center=self.pos)
+        self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
 
         self.direction = pygame.math.Vector2()
         self.speed = 100
@@ -38,5 +39,9 @@ class Enemy(pygame.sprite.Sprite):
         
         self.rect.center += self.direction * self.speed * dt
 
+    def check_collision(self):
+        print(self.rect.colliderect(self.target.rect))
+
     def update(self, dt):
         self.move(dt)
+        self.check_collision()
