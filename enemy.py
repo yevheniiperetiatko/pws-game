@@ -11,12 +11,17 @@ class Enemy(pygame.sprite.Sprite):
         target,
         image_name,
         pos=None,
+        width=60,
+        height=80
     ):
         super().__init__(groups)
-        
+
+        self.width = width
+        self.height = height
+
         self.image = pygame.transform.scale(
             pygame.image.load(f'sprites/{image_name}').convert_alpha(),
-            (60, 80)
+            (self.width, self.height)
         )
 
         self.pos = pos if pos is not None else self.get_spawn_position()
@@ -28,6 +33,9 @@ class Enemy(pygame.sprite.Sprite):
         self.target = target
 
     def get_spawn_position(self) -> tuple:
+        """
+        Method calculates a random spawning position for an enemy. 
+        """
         return (randint(-300, 0), randint(-300, 0))
 
     def move(self, dt):
@@ -39,9 +47,6 @@ class Enemy(pygame.sprite.Sprite):
         
         self.rect.center += self.direction * self.speed * dt
 
-    def check_collision(self):
-        print(self.rect.colliderect(self.target.rect))
-
     def update(self, dt):
         self.move(dt)
-        self.check_collision()
+        

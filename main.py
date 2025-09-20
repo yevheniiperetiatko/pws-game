@@ -4,6 +4,7 @@ import sys
 from settings import *
 from player import Player
 from enemy import Enemy
+from projectile import Projectile
 
 class Game():
     def __init__(self):
@@ -20,16 +21,25 @@ class Game():
         self.player = Player((400, 400), self.all_sprites)
 
         # generate enemies
-        self.enemies = pygame.sprite.Group()
+        self.enemies = self.generate_enemies()
 
-        for _ in range(10):
-            self.enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png'))
-            self.enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png'))
+    def draw_all_rects(self, should_work):
+        if not should_work:
+            return
 
-    def draw_all_rects(self):
         # drawing all rects of sprites
         for sprite in self.all_sprites:
             pygame.draw.rect(self.display_surf, (0, 255, 0), sprite.rect) 
+
+    def generate_enemies(self):
+        enemies = pygame.sprite.Group()
+
+        for _ in range(50):
+            enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png'))
+            enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png'))
+            enemies.add(Enemy(self.all_sprites, self.player, 'slime.png', width=60, height=50))
+
+        return enemies
 
     def loop(self):
         while self.running:
@@ -41,13 +51,21 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.running = False
 
-            self.display_surf.fill('WHITE')
+                # if the player presses LMB spawn a projectile
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    projectile = Projectile(
+                        self.all_sprites,
+                        700,
+                        self.player.rect.center,
+                        pygame.mouse.get_pos()
+                    )  
+
+            self.display_surf.fill('black')
             self.all_sprites.update(dt)
             
             # drawing 
+            self.draw_all_rects(False) # function that displays all the rects
             self.all_sprites.draw(self.display_surf)
-            
-            # self.draw_all_rects()
 
             pygame.display.update()
         

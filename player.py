@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.speed = 500
 
-        self.was_flipped = False
+        self.was_mirrored = False
 
     def input(self):
         self.keys = pygame.key.get_pressed()
@@ -32,14 +32,15 @@ class Player(pygame.sprite.Sprite):
         self.direction.y = y_direction
         self.direction = self.direction.normalize() if self.direction else self.direction
 
+        # mirroring player's sprite depending on its direction 
         if x_direction == 1:
-            if self.was_flipped == True:
+            if self.was_mirrored == True:
                 self.image = pygame.transform.flip(self.image, True, False)
-                self.was_flipped = False
+                self.was_mirrored = False
         if x_direction == -1:
-            if self.was_flipped == False:
+            if self.was_mirrored == False:
                 self.image = pygame.transform.flip(self.image, True, False)
-                self.was_flipped = True
+                self.was_mirrored = True
 
     def move(self, dt):
         self.rect.center += self.direction * self.speed * dt
