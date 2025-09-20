@@ -10,11 +10,14 @@ class Enemy(pygame.sprite.Sprite):
         groups,
         target,
         image_name,
+        speed,
         pos=None,
         width=60,
         height=80
     ):
         super().__init__(groups)
+
+        self.speed = speed
 
         self.width = width
         self.height = height
@@ -28,8 +31,6 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
 
         self.direction = pygame.math.Vector2()
-        self.speed = 100
-
         self.target = target
 
     def get_spawn_position(self) -> tuple:

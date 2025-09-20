@@ -34,10 +34,10 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(50):
-            enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png'))
-            enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png'))
-            enemies.add(Enemy(self.all_sprites, self.player, 'slime.png', width=60, height=50))
+        for _ in range(1):
+            enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png', 150))
+            enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png', 70))
+            enemies.add(Enemy(self.all_sprites, self.player, 'slime.png', 100, width=60, height=50))
 
         return enemies
 
