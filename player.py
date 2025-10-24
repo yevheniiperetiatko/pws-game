@@ -4,7 +4,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(
             self, 
             pos, 
-            groups
+            groups,
+            health=50
         ):
         super().__init__(groups)
         
@@ -14,6 +15,8 @@ class Player(pygame.sprite.Sprite):
         )
 
         self.pos = pos
+
+        self.health = health
 
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
         

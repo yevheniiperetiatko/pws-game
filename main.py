@@ -35,7 +35,7 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(10):
+        for _ in range(1):
             enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH))
             enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png', 70, health=ZOMBIE_HEALTH))
             enemies.add(Enemy(self.all_sprites, self.player, 'slime.png', 100, width=60, height=50, health=SLIME_HEALTH))
@@ -71,12 +71,19 @@ class Game():
             self.all_sprites.draw(self.display_surf)
             
             for bullet in self.bullets:
-                self.collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
-                for enemy in self.collided_enemies:
+                collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
+                for enemy in collided_enemies:
                     bullet.kill()
                     enemy.health -= bullet.damage
 
                     if enemy.health <= 0: enemy.kill()
+
+            
+            player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
+            for enemy in player_enemy_collisions:
+                self.player.health -= enemy.damage
+                
+                if self.player.health <= 0: self.player.kill()
 
             pygame.display.update()
         
