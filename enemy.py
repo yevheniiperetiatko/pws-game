@@ -11,6 +11,7 @@ class Enemy(pygame.sprite.Sprite):
         target,
         image_name,
         speed,
+        health,
         pos=None,
         width=60,
         height=80,
@@ -21,6 +22,8 @@ class Enemy(pygame.sprite.Sprite):
 
         self.width = width
         self.height = height
+
+        self.health = health
 
         self.image = pygame.transform.scale(
             pygame.image.load(f'sprites/{image_name}').convert_alpha(),

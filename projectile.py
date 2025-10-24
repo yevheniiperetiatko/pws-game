@@ -2,10 +2,11 @@ import pygame
 import math
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, groups, speed, start_pos, target_pos):
+    def __init__(self, groups, speed, start_pos, target_pos, damage=10):
         super().__init__(groups)
 
         self.speed = speed
+        self.damage = damage
     
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/orb_projectile.png').convert_alpha(),
