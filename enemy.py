@@ -12,6 +12,7 @@ class Enemy(pygame.sprite.Sprite):
         image_name,
         speed,
         health,
+        damage,
         pos=None,
         width=60,
         height=80,
@@ -19,6 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(groups)
 
         self.speed = speed
+        self.damage = damage
 
         self.width = width
         self.height = height

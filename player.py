@@ -1,10 +1,12 @@
 import pygame
 
+from settings import PLAYER_HEALTH
+
 class Player(pygame.sprite.Sprite):
     def __init__(
             self, 
             pos, 
-            groups
+            groups,
         ):
         super().__init__(groups)
         
@@ -15,12 +17,16 @@ class Player(pygame.sprite.Sprite):
 
         self.pos = pos
 
+        self.health = PLAYER_HEALTH
+
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
         
         self.direction = pygame.math.Vector2()
         self.speed = 500
 
         self.was_mirrored = False
+        self.invulnerable = False
+        self.invuln_timer = 0.0
 
     def input(self):
         self.keys = pygame.key.get_pressed()
@@ -48,4 +54,5 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input()
         self.move(dt)
+        print(self.health)
         

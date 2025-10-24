@@ -36,9 +36,18 @@ class Game():
         enemies = pygame.sprite.Group()
 
         for _ in range(10):
-            enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH))
-            enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png', 70, health=ZOMBIE_HEALTH))
-            enemies.add(Enemy(self.all_sprites, self.player, 'slime.png', 100, width=60, height=50, health=SLIME_HEALTH))
+            # skeleton spawn
+            enemies.add(
+                Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH, damage=SKELETON_DAMAGE)
+            )
+            # zombie spawn
+            enemies.add(
+                Enemy(self.all_sprites, self.player, 'zombie.png', 70, health=ZOMBIE_HEALTH, damage=ZOMBIE_DAMAGE)
+            )
+            # slime spawn
+            enemies.add(
+                Enemy(self.all_sprites, self.player, 'slime.png', 100, width=60, height=50, health=SLIME_HEALTH, damage=SLIME_DAMAGE)
+            )
 
         return enemies
 
@@ -71,12 +80,26 @@ class Game():
             self.all_sprites.draw(self.display_surf)
             
             for bullet in self.bullets:
-                self.collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
-                for enemy in self.collided_enemies:
+                collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
+                for enemy in collided_enemies:
                     bullet.kill()
                     enemy.health -= bullet.damage
 
                     if enemy.health <= 0: enemy.kill()
+
+            # checking collision between an enemy and the player            
+            player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
+            for enemy in player_enemy_collisions:
+                if not self.player.invulnerable:
+                    self.player.health -= enemy.damage
+                    self.player.invulnerable = True
+                    self.player.invuln_timer = INVULN_TIME
+                else:
+                    self.player.invuln_timer -= dt
+                    if self.player.invuln_timer <= 0:
+                        self.player.invulnerable = False
+                
+                if self.player.health <= 0: self.player.kill()
 
             pygame.display.update()
         
