@@ -22,6 +22,7 @@ class Game():
 
         # generate enemies
         self.enemies = self.generate_enemies()
+        self.bullets = pygame.sprite.Group()
 
     def draw_all_rects(self, should_work):
         if not should_work:
@@ -34,7 +35,7 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(1):
+        for _ in range(10):
             enemies.add(Enemy(self.all_sprites, self.player, 'skeleton.png', 150))
             enemies.add(Enemy(self.all_sprites, self.player, 'zombie.png', 70))
             enemies.add(Enemy(self.all_sprites, self.player, 'slime.png', 100, width=60, height=50))
@@ -58,7 +59,9 @@ class Game():
                         700,
                         self.player.rect.center,
                         pygame.mouse.get_pos()
-                    )  
+                    )
+
+                    self.bullets.add(projectile)
 
             self.display_surf.fill('black')
             self.all_sprites.update(dt)
@@ -66,6 +69,12 @@ class Game():
             # drawing 
             self.draw_all_rects(False) # function that displays all the rects
             self.all_sprites.draw(self.display_surf)
+            
+            for bullet in self.bullets:
+                self.collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
+                for enemy in self.collided_enemies:
+                    enemy.kill()
+                    bullet.kill()
 
             pygame.display.update()
         

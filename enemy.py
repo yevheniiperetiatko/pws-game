@@ -13,7 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         speed,
         pos=None,
         width=60,
-        height=80
+        height=80,
     ):
         super().__init__(groups)
 
