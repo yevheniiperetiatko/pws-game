@@ -5,6 +5,8 @@ from settings import *
 from player import Player
 from enemy import Enemy
 from projectile import Projectile
+from all_sprites import AllSprites
+from background import Background
 
 class Game():
     def __init__(self):
@@ -13,13 +15,12 @@ class Game():
         self.display_surf = pygame.display.set_mode((0,0), (pygame.FULLSCREEN))
         pygame.display.set_caption('Survivors')
         
-        self.background_img = pygame.image.load('map textures/map.png').convert()
-
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = AllSprites()
 
+        self.background = Background((0,0), self.all_sprites)
         self.player = Player((400, 400), self.all_sprites)
 
         # generate enemies
@@ -37,7 +38,7 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(10):
+        for _ in range(100):
             # skeleton spawn
             enemies.add(
                 Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH, damage=SKELETON_DAMAGE)
@@ -69,17 +70,17 @@ class Game():
                         self.all_sprites,
                         700,
                         self.player.rect.center,
-                        pygame.mouse.get_pos()
+                        pygame.mouse.get_pos(),
+                        self.all_sprites.offset
                     )
 
                     self.bullets.add(projectile)
-
-            self.display_surf.blit(self.background_img, (-1000,-1000))
+            
             self.all_sprites.update(dt)
             
             # drawing 
             self.draw_all_rects(False) # function that displays all the rects
-            self.all_sprites.draw(self.display_surf)
+            self.all_sprites.draw(self.player.rect.center)
             
             for bullet in self.bullets:
                 collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)

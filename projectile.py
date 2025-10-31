@@ -1,8 +1,10 @@
 import pygame
 import math
 
+from all_sprites import AllSprites
+
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, groups, speed, start_pos, target_pos, damage=10):
+    def __init__(self, groups, speed, start_pos, target_pos, offset, damage=10):
         super().__init__(groups)
 
         self.speed = speed
@@ -16,7 +18,7 @@ class Projectile(pygame.sprite.Sprite):
         self.rect = self.image.get_frect(center=(start_pos))
 
         self.start_pos = start_pos
-        self.target_pos = pygame.math.Vector2(target_pos)
+        self.target_pos = pygame.math.Vector2(target_pos) - offset
 
         self.direction = self.target_pos - self.start_pos
 
