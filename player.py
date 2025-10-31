@@ -54,5 +54,4 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input()
         self.move(dt)
-        print(self.health)
         

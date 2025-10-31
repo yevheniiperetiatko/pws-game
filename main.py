@@ -10,9 +10,11 @@ class Game():
     def __init__(self):
         pygame.init()
         
-        self.display_surf = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.display_surf = pygame.display.set_mode((0,0), (pygame.FULLSCREEN))
         pygame.display.set_caption('Survivors')
         
+        self.background_img = pygame.image.load('map textures/map.png').convert()
+
         self.clock = pygame.time.Clock()
         self.running = True
 
@@ -72,7 +74,7 @@ class Game():
 
                     self.bullets.add(projectile)
 
-            self.display_surf.fill('black')
+            self.display_surf.blit(self.background_img, (-1000,-1000))
             self.all_sprites.update(dt)
             
             # drawing 
