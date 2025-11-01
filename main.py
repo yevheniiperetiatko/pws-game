@@ -21,7 +21,7 @@ class Game():
         self.all_sprites = AllSprites()
 
         self.background = Background((0,0), self.all_sprites)
-        self.player = Player((400, 400), self.all_sprites)
+        self.player = Player((400,400), self.all_sprites)
 
         # generate enemies
         self.enemies = self.generate_enemies()
@@ -41,7 +41,7 @@ class Game():
         for _ in range(100):
             # skeleton spawn
             enemies.add(
-                Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH, damage=SKELETON_DAMAGE)
+               Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH, damage=SKELETON_DAMAGE)
             )
             # zombie spawn
             enemies.add(
@@ -53,6 +53,20 @@ class Game():
             )
 
         return enemies
+
+    def handle_enemies_colisions(self):
+        collisions = pygame.sprite.groupcollide(self.enemies, self.enemies, False, False)
+
+        for enemy, collided_list in collisions.items():
+            for other in collided_list:
+                if enemy == other:
+                    continue
+                
+                diff = pygame.math.Vector2(enemy.rect.center) - pygame.Vector2(other.rect.center)
+                diff = diff.normalize()
+
+                enemy.rect.center += diff
+                other.rect.center -= diff
 
     def loop(self):
         while self.running:
@@ -79,9 +93,10 @@ class Game():
             self.all_sprites.update(dt)
             
             # drawing 
-            self.draw_all_rects(False) # function that displays all the rects
+            self.draw_all_rects(False) # function that displays all the rects (doesnt work anymore lol)
             self.all_sprites.draw(self.player.rect.center)
             
+            # TODO: create a func for this
             for bullet in self.bullets:
                 collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
                 for enemy in collided_enemies:
@@ -90,7 +105,11 @@ class Game():
 
                     if enemy.health <= 0: enemy.kill()
 
-            # checking collision between an enemy and the player            
+            # collisions between enemies
+            self.handle_enemies_colisions()
+
+            # checking collision between an enemy and the player      
+            # TODO: create a separate func for this logic      
             player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
             for enemy in player_enemy_collisions:
                 if not self.player.invulnerable:
