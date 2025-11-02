@@ -2,6 +2,8 @@ import pygame
 import sys
 
 from settings import *
+from ui import *
+
 from player import Player
 from enemy import Enemy
 from projectile import Projectile
@@ -14,6 +16,7 @@ class Game():
         
         self.display_surf = pygame.display.set_mode((0,0), (pygame.FULLSCREEN))
         pygame.display.set_caption('Survivors')
+        pygame.mouse.set_visible(False)
         
         self.clock = pygame.time.Clock()
         self.running = True
@@ -22,6 +25,7 @@ class Game():
 
         self.background = Background((0,0), self.all_sprites)
         self.player = Player((400,400), self.all_sprites)
+        self.crosshair = Crosshair(self.all_sprites.offset)
 
         # generate enemies
         self.enemies = self.generate_enemies()
@@ -78,7 +82,7 @@ class Game():
                 if event.type == pygame.QUIT:
                     self.running = False
 
-                # if the player presses LMB spawn a projectile
+                # if the player presses LMB spawn a projectile. shooting
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     projectile = Projectile(
                         self.all_sprites,
@@ -93,8 +97,9 @@ class Game():
             self.all_sprites.update(dt)
             
             # drawing 
-            self.draw_all_rects(False) # function that displays all the rects (doesnt work anymore lol)
+            self.draw_all_rects(False) # function that displays all the rects (doesnt work anymore lol) TODO: fix or remove
             self.all_sprites.draw(self.player.rect.center)
+            self.crosshair.draw()
             
             # TODO: create a func for this
             for bullet in self.bullets:
