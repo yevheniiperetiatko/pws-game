@@ -84,14 +84,7 @@ class Game():
 
                 # if the player presses LMB spawn a projectile. shooting
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    projectile = Projectile(
-                        self.all_sprites,
-                        700,
-                        self.player.rect.center,
-                        pygame.mouse.get_pos(),
-                        self.all_sprites.offset
-                    )
-
+                    projectile = self.player.shoot(self.all_sprites,)
                     self.bullets.add(projectile)
             
             self.all_sprites.update(dt)

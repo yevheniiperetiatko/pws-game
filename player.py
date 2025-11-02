@@ -1,6 +1,7 @@
 import pygame
 
 from settings import PLAYER_HEALTH
+from projectile import Projectile
 
 class Player(pygame.sprite.Sprite):
     def __init__(
@@ -47,6 +48,20 @@ class Player(pygame.sprite.Sprite):
             if self.was_mirrored == False:
                 self.image = pygame.transform.flip(self.image, True, False)
                 self.was_mirrored = True
+
+    def shoot(self, groups) -> Projectile:
+        """
+        The func creates a projectile and returns it.
+        """ 
+        projectile = Projectile(
+            groups,
+            700,
+            self.rect.center,
+            pygame.mouse.get_pos(),
+            groups.offset
+        )
+
+        return projectile
 
     def move(self, dt):
         self.rect.center += self.direction * self.speed * dt
