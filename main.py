@@ -36,14 +36,6 @@ class Game():
         self.enemies = self.generate_enemies()
         self.bullets = pygame.sprite.Group()
 
-    def draw_all_rects(self, should_work):
-        if not should_work:
-            return
-
-        # drawing all rects of sprites
-        for sprite in self.all_sprites:
-            pygame.draw.rect(self.display_surf, (0, 255, 0), sprite.rect) 
-
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
@@ -77,6 +69,31 @@ class Game():
                 enemy.rect.center += diff
                 other.rect.center -= diff
 
+    def handle_bullet_enemies_collision(self):
+        for bullet in self.bullets:
+                collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
+                for enemy in collided_enemies:
+                    bullet.kill()
+                    enemy.health -= bullet.damage
+
+                    if enemy.health <= 0:
+                        self.all_coins.add(Coin(self.all_sprites, enemy.rect.center, self.all_sprites.offset))
+                        enemy.kill()
+
+    def handle_player_enemies_collision(self):
+        player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
+        for enemy in player_enemy_collisions:
+            if not self.player.invulnerable:
+                self.player.health -= enemy.damage
+                self.player.invulnerable = True
+                self.player.invuln_timer = INVULN_TIME
+            else:
+                self.player.invuln_timer -= dt
+                if self.player.invuln_timer <= 0:
+                    self.player.invulnerable = False
+            
+            if self.player.health <= 0: self.player.kill()
+    
     def loop(self):
         while self.running:
             # dt
@@ -95,7 +112,6 @@ class Game():
             self.all_sprites.update(dt)
             
             # drawing 
-            self.draw_all_rects(False) # function that displays all the rects (doesnt work anymore lol) TODO: fix or remove
             self.all_coins.draw(self.display_surf)
             self.all_sprites.draw(self.player.rect.center)
 
@@ -105,34 +121,14 @@ class Game():
             self.manabar_frame.draw()
             self.crosshair.draw()
 
-            # TODO: create a func for this
-            for bullet in self.bullets:
-                collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
-                for enemy in collided_enemies:
-                    bullet.kill()
-                    enemy.health -= bullet.damage
+            # collision between bullet and enemies
+            self.handle_bullet_enemies_collision()
 
-                    if enemy.health <= 0:
-                        self.all_coins.add(Coin(self.all_sprites, enemy.rect.center, self.all_sprites.offset))
-                        enemy.kill()
-
-            # collisions between enemies
+            # collision between enemies
             self.handle_enemies_colisions()
 
-            # TODO: create a separate func for this logic      
             # checking collision between an enemy and the player      
-            player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
-            for enemy in player_enemy_collisions:
-                if not self.player.invulnerable:
-                    self.player.health -= enemy.damage
-                    self.player.invulnerable = True
-                    self.player.invuln_timer = INVULN_TIME
-                else:
-                    self.player.invuln_timer -= dt
-                    if self.player.invuln_timer <= 0:
-                        self.player.invulnerable = False
-                
-                if self.player.health <= 0: self.player.kill()
+            self.handle_player_enemies_collision()
 
             pygame.display.update()
         
