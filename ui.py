@@ -1,6 +1,10 @@
 
 import pygame
 
+pygame.init()
+
+font = pygame.font.Font('fonts/font.ttf', 30)
+
 class Crosshair:
     def __init__(self, offset):
         self.image = pygame.transform.scale(
@@ -18,18 +22,23 @@ class Crosshair:
         self.display_surface.blit(self.image, self.rect.topleft + self.offset)
 
 class CoinCounter:
-    def __init__(self):
+    def __init__(self, amount):
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/coin_counter.png').convert_alpha(),
             (130, 70)
         )
 
+        self.display_surface = pygame.display.get_surface()
+
+        self.coin_amount_text = font.render(f'{amount}', True, (250, 185, 5))
+        self.coin_amount_pos = (90, 222)
+
         self.pos = (20, 200)
         self.rect = self.image.get_frect(center=self.pos)
-        self.display_surface = pygame.display.get_surface()
     
     def draw(self):
         self.display_surface.blit(self.image, self.pos)
+        self.display_surface.blit(self.coin_amount_text, self.coin_amount_pos)
 
 class HealthBarFrame:
     def __init__(self):

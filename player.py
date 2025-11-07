@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.pos = pos
 
         self.health = PLAYER_HEALTH
+        self.coin_amount = 0
 
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
         

@@ -20,13 +20,13 @@ class Game():
         
         self.clock = pygame.time.Clock()
         self.running = True
-
+            
         self.all_sprites = AllSprites()
 
         self.background = Background((0,0), self.all_sprites)
         self.player = Player((400,400), self.all_sprites)
         self.crosshair = Crosshair(self.all_sprites.offset)
-        self.coin_counter = CoinCounter()
+        self.coin_counter = CoinCounter(self.player.coin_amount)
         self.healthbar_frame = HealthBarFrame()
         self.manabar_frame = ManaBarFrame()
 
@@ -99,7 +99,7 @@ class Game():
             self.healthbar_frame.draw()
             self.manabar_frame.draw()
             self.crosshair.draw()
-            
+
             # TODO: create a func for this
             for bullet in self.bullets:
                 collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
