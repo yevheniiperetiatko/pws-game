@@ -2,6 +2,7 @@ import pygame
 import math
 
 from random import randint
+from coin import Coin
 from settings import *
 
 class Enemy(pygame.sprite.Sprite):
@@ -19,6 +20,7 @@ class Enemy(pygame.sprite.Sprite):
     ):
         super().__init__(groups)
 
+        self.groups = groups
         self.speed = speed
         self.damage = damage
 
@@ -37,6 +39,13 @@ class Enemy(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.target = target
+
+    def on_hit(self, bullet_damage, all_coins):
+        self.health -= bullet_damage
+
+        if self.health <= 0:
+            all_coins.add(Coin(self.groups, self.rect.center, self.groups.offset))
+            self.kill()
 
     def get_spawn_position(self) -> tuple:
         """

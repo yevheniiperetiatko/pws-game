@@ -63,6 +63,7 @@ class Game():
                 if enemy == other:
                     continue
                 
+                # logic to push enemies away from each other
                 diff = pygame.math.Vector2(enemy.rect.center) - pygame.Vector2(other.rect.center)
                 diff = diff.normalize()
 
@@ -74,13 +75,9 @@ class Game():
                 collided_enemies = pygame.sprite.spritecollide(bullet, self.enemies, False)
                 for enemy in collided_enemies:
                     bullet.kill()
-                    enemy.health -= bullet.damage
+                    enemy.on_hit(bullet.damage, self.all_coins)
 
-                    if enemy.health <= 0:
-                        self.all_coins.add(Coin(self.all_sprites, enemy.rect.center, self.all_sprites.offset))
-                        enemy.kill()
-
-    def handle_player_enemies_collision(self):
+    def handle_player_enemies_collision(self, dt):
         player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
         for enemy in player_enemy_collisions:
             if not self.player.invulnerable:
@@ -128,7 +125,7 @@ class Game():
             self.handle_enemies_colisions()
 
             # checking collision between an enemy and the player      
-            self.handle_player_enemies_collision()
+            self.handle_player_enemies_collision(dt)
 
             pygame.display.update()
         
