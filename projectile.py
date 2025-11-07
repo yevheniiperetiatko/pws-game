@@ -12,7 +12,7 @@ class Projectile(pygame.sprite.Sprite):
     
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/orb_projectile.png').convert_alpha(),
-            (30, 30)
+            (40, 40)
         )
 
         self.rect = self.image.get_frect(center=(start_pos))

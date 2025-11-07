@@ -55,7 +55,7 @@ class Player(pygame.sprite.Sprite):
         """ 
         projectile = Projectile(
             groups,
-            700,
+            1500,
             self.rect.center,
             pygame.mouse.get_pos(),
             groups.offset

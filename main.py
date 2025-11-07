@@ -26,6 +26,9 @@ class Game():
         self.background = Background((0,0), self.all_sprites)
         self.player = Player((400,400), self.all_sprites)
         self.crosshair = Crosshair(self.all_sprites.offset)
+        self.coin_counter = CoinCounter()
+        self.healthbar_frame = HealthBarFrame()
+        self.manabar_frame = ManaBarFrame()
 
         # generate enemies
         self.enemies = self.generate_enemies()
@@ -42,7 +45,7 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(100):
+        for _ in range(20):
             # skeleton spawn
             enemies.add(
                Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH, damage=SKELETON_DAMAGE)
@@ -53,7 +56,7 @@ class Game():
             )
             # slime spawn
             enemies.add(
-                Enemy(self.all_sprites, self.player, 'slime.png', 100, width=60, height=50, health=SLIME_HEALTH, damage=SLIME_DAMAGE)
+                Enemy(self.all_sprites, self.player, 'slime.png', 100, width=70, height=50, health=SLIME_HEALTH, damage=SLIME_DAMAGE)
             )
 
         return enemies
@@ -84,7 +87,7 @@ class Game():
 
                 # if the player presses LMB spawn a projectile. shooting
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    projectile = self.player.shoot(self.all_sprites,)
+                    projectile = self.player.shoot(self.all_sprites)
                     self.bullets.add(projectile)
             
             self.all_sprites.update(dt)
@@ -92,6 +95,9 @@ class Game():
             # drawing 
             self.draw_all_rects(False) # function that displays all the rects (doesnt work anymore lol) TODO: fix or remove
             self.all_sprites.draw(self.player.rect.center)
+            self.coin_counter.draw()
+            self.healthbar_frame.draw()
+            self.manabar_frame.draw()
             self.crosshair.draw()
             
             # TODO: create a func for this
