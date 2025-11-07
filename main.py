@@ -4,6 +4,7 @@ import sys
 from settings import *
 from ui import *
 
+from coin import Coin
 from player import Player
 from enemy import Enemy
 from projectile import Projectile
@@ -20,7 +21,8 @@ class Game():
         
         self.clock = pygame.time.Clock()
         self.running = True
-            
+        
+        self.all_coins = pygame.sprite.Group()
         self.all_sprites = AllSprites()
 
         self.background = Background((0,0), self.all_sprites)
@@ -94,7 +96,10 @@ class Game():
             
             # drawing 
             self.draw_all_rects(False) # function that displays all the rects (doesnt work anymore lol) TODO: fix or remove
+            self.all_coins.draw(self.display_surf)
             self.all_sprites.draw(self.player.rect.center)
+
+            # TODO: dont repeat yourself
             self.coin_counter.draw()
             self.healthbar_frame.draw()
             self.manabar_frame.draw()
@@ -107,13 +112,15 @@ class Game():
                     bullet.kill()
                     enemy.health -= bullet.damage
 
-                    if enemy.health <= 0: enemy.kill()
+                    if enemy.health <= 0:
+                        self.all_coins.add(Coin(self.all_sprites, enemy.rect.center, self.all_sprites.offset))
+                        enemy.kill()
 
             # collisions between enemies
             self.handle_enemies_colisions()
 
-            # checking collision between an enemy and the player      
             # TODO: create a separate func for this logic      
+            # checking collision between an enemy and the player      
             player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
             for enemy in player_enemy_collisions:
                 if not self.player.invulnerable:
