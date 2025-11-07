@@ -25,20 +25,25 @@ class CoinCounter:
     def __init__(self, amount):
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/coin_counter.png').convert_alpha(),
-            (130, 70)
+            (145, 70)
         )
-
+        
         self.display_surface = pygame.display.get_surface()
 
-        self.coin_amount_text = font.render(f'{amount}', True, (250, 185, 5))
+        self.amount = amount
         self.coin_amount_pos = (90, 222)
 
         self.pos = (20, 200)
         self.rect = self.image.get_frect(center=self.pos)
     
     def draw(self):
+        self.coin_amount_text = font.render(f'{self.amount}', True, (250, 185, 5))
+
         self.display_surface.blit(self.image, self.pos)
         self.display_surface.blit(self.coin_amount_text, self.coin_amount_pos)
+
+    def update(self, amount):
+        self.amount = amount
 
 class HealthBarFrame:
     def __init__(self):

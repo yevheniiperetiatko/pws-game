@@ -39,7 +39,7 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(20):
+        for _ in range(100):
             # skeleton spawn
             enemies.add(
                Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH, damage=SKELETON_DAMAGE)
@@ -91,6 +91,13 @@ class Game():
             
             if self.player.health <= 0: self.player.kill()
     
+    def handle_player_coins_collision(self):
+        collided_coins = pygame.sprite.spritecollide(self.player, self.all_coins, False)
+        if collided_coins:
+            for coin in collided_coins:
+                self.player.coin_amount += 1
+                coin.kill()
+
     def loop(self):
         while self.running:
             # dt
@@ -107,6 +114,7 @@ class Game():
                     self.bullets.add(projectile)
             
             self.all_sprites.update(dt)
+            self.coin_counter.update(self.player.coin_amount)
             
             # drawing 
             self.all_coins.draw(self.display_surf)
@@ -126,6 +134,9 @@ class Game():
 
             # checking collision between an enemy and the player      
             self.handle_player_enemies_collision(dt)
+
+            # checking collision between coins and the player
+            self.handle_player_coins_collision()
 
             pygame.display.update()
         
