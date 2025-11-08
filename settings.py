@@ -14,3 +14,10 @@ ZOMBIE_DAMAGE = 10
 
 # cooldown after player takes damage
 INVULN_TIME = 0.3
+
+# animation speed
+PLAYER_ANIMATION_SPEED = 0.12
+
+# sprites sizes
+PLAYER_WIDTH = 80
+PLAYER_HEIGHT = 110

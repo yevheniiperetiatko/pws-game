@@ -1,7 +1,8 @@
 import pygame
 
-from settings import PLAYER_HEALTH
+from settings import *
 from projectile import Projectile
+from animation import Animation
 
 class Player(pygame.sprite.Sprite):
     def __init__(
@@ -11,9 +12,20 @@ class Player(pygame.sprite.Sprite):
         ):
         super().__init__(groups)
         
+        self.state = "walking"
+
+        self.animation = Animation(
+            self.state,
+            PLAYER_ANIMATION_SPEED,
+            sprites={
+                "idle": "sprites/player.png",
+                "walking": [f"sprites/player_{i}.png" for i in range(1, 5)]
+            }
+        )
+
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/player.png').convert_alpha(),
-            (80, 110)
+            (PLAYER_WIDTH, PLAYER_HEALTH)
         )
 
         self.pos = pos
@@ -70,4 +82,9 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input()
         self.move(dt)
+        
+        self.image = pygame.transform.scale(
+            pygame.image.load(self.animation.get_sprite(self.state)),
+            (PLAYER_WIDTH, PLAYER_HEIGHT)
+        )
         

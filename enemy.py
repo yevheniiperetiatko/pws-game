@@ -21,6 +21,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(groups)
 
         self.groups = groups
+
         self.speed = speed
         self.damage = damage
 
