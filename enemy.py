@@ -64,6 +64,8 @@ class Enemy(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.target = target
 
+        self.should_mirror = False
+
     def on_hit(self, bullet_damage, all_coins):
         self.health -= bullet_damage
 
@@ -87,7 +89,13 @@ class Enemy(pygame.sprite.Sprite):
         
         self.rect.center += self.direction * self.speed * dt
 
+        # check if the sprite should be mirrored
+        if self.direction[0] < 0:
+            self.should_mirror = True
+        else:
+            self.should_mirror = False
+
     def update(self, dt):
         self.move(dt)
 
-        self.image = self.animation.get_sprite(self.state)
+        self.image = self.animation.get_sprite(self.state, self.should_mirror)

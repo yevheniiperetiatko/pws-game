@@ -46,7 +46,7 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(1):
+        for _ in range(5):
             # skeleton spawn
             enemies.add(
                Enemy(self.all_sprites, self.player, 'skeleton.png', 150, SKELETON_HEALTH, SKELETON_DAMAGE, SKELETON_SIZE, 'skeleton')
