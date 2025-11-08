@@ -33,7 +33,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.speed = 500
 
-        self.was_mirrored = False
+        self.should_mirror = False
         self.invulnerable = False
         self.invuln_timer = 0.0
 
@@ -49,13 +49,11 @@ class Player(pygame.sprite.Sprite):
 
         # mirroring player's sprite depending on its direction 
         if x_direction == 1:
-            if self.was_mirrored == True:
-                self.image = pygame.transform.flip(self.image, True, False)
-                self.was_mirrored = False
+            if self.should_mirror == True:
+                self.should_mirror = False
         if x_direction == -1:
-            if self.was_mirrored == False:
-                self.image = pygame.transform.flip(self.image, True, False)
-                self.was_mirrored = True
+            if self.should_mirror == False:
+                self.should_mirror = True
 
     def shoot(self, groups) -> Projectile:
         """
@@ -83,5 +81,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.state = 'walking'
         
-        self.image = self.animation.get_sprite(self.state)
+        self.image = self.animation.get_sprite(self.state, self.should_mirror)
+
+        
+
         

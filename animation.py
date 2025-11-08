@@ -8,10 +8,10 @@ class Animation:
         self.current_frame = 0
         self.speed = speed
 
-    def get_sprite(self, current_state):
+    def get_sprite(self, current_state, should_mirror=False):
         """
-        This function returns the current sprite 
-        to animate according to the current state 
+        This function returns the current frame 
+        for animation according to the current state 
         of an entity.
         """
 
@@ -19,6 +19,9 @@ class Animation:
             self.current_frame = 0
 
         sprite = self.sprites[current_state][int(self.current_frame)]
+
+        if should_mirror: sprite = pygame.transform.flip(sprite, True, False)
+
         self.current_frame += self.speed
 
         return sprite
