@@ -31,10 +31,11 @@ SLIME_HEALTH = 30
 SKELETON_HEALTH = 50 
 ZOMBIE_HEALTH = 65
 
-# enemies damage
+# damages
 SLIME_DAMAGE = 5
 SKELETON_DAMAGE = 8 
 ZOMBIE_DAMAGE = 10
+PROJECTILE_DAMAGE = 10
 
 # cooldown after player takes damage
 INVULN_TIME = 0.3
