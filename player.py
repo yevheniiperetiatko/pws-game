@@ -12,21 +12,16 @@ class Player(pygame.sprite.Sprite):
         ):
         super().__init__(groups)
         
-        self.state = "walking"
+        self.name = 'player'
+        self.state = "idle"
 
         self.animation = Animation(
             self.state,
             PLAYER_ANIMATION_SPEED,
-            sprites={
-                "idle": "sprites/player.png",
-                "walking": [f"sprites/player_{i}.png" for i in range(1, 5)]
-            }
+            PLAYER_SPRITES
         )
 
-        self.image = pygame.transform.scale(
-            pygame.image.load('sprites/player.png').convert_alpha(),
-            (PLAYER_WIDTH, PLAYER_HEALTH)
-        )
+        self.image = PLAYER_SPRITES[self.state][self.animation.current_frame]
 
         self.pos = pos
 
@@ -83,8 +78,10 @@ class Player(pygame.sprite.Sprite):
         self.input()
         self.move(dt)
         
-        self.image = pygame.transform.scale(
-            pygame.image.load(self.animation.get_sprite(self.state)),
-            (PLAYER_WIDTH, PLAYER_HEIGHT)
-        )
+        if self.direction == [0, 0]:
+            self.state = 'idle'
+        else:
+            self.state = 'walking'
+        
+        self.image = self.animation.get_sprite(self.state)
         

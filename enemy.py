@@ -3,6 +3,8 @@ import math
 
 from random import randint
 from coin import Coin
+from animation import Animation
+
 from settings import *
 
 class Enemy(pygame.sprite.Sprite):
@@ -14,9 +16,9 @@ class Enemy(pygame.sprite.Sprite):
         speed,
         health,
         damage,
+        size,
+        name,
         pos=None,
-        width=60,
-        height=80,
     ):
         super().__init__(groups)
 
@@ -25,15 +27,36 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = speed
         self.damage = damage
 
-        self.width = width
-        self.height = height
+        self.size = size
+        self.width = size[0]
+        self.height = size[1]
 
         self.health = health
 
-        self.image = pygame.transform.scale(
-            pygame.image.load(f'sprites/{image_name}').convert_alpha(),
-            (self.width, self.height)
+        self.name = name
+
+        self.state = 'idle'
+
+        self.sprites_group = None
+        self.animation_speed = None
+
+        if self.name == 'skeleton':
+            self.sprites_group = SKELETON_SPRITES
+            self.animation_speed = SKELETON_ANIMATION_SPEED
+        elif self.name == 'zombie':
+            self.sprites_group = ZOMBIE_SPRITES
+            self.animation_speed = ZOMBIE_ANIMATION_SPEED
+        elif self.name == 'slime':
+            self.sprites_group = SLIME_SPRITES
+            self.animation_speed = SLIME_ANIMATION_SPEED
+
+        self.animation = Animation(
+            self.state,
+            self.animation_speed,
+            self.sprites_group,
         )
+ 
+        self.image = self.sprites_group[self.state][self.animation.current_frame]
 
         self.pos = pos if pos is not None else self.get_spawn_position()
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
@@ -55,6 +78,7 @@ class Enemy(pygame.sprite.Sprite):
         return (randint(-300, 0), randint(-300, 0))
 
     def move(self, dt):
+        self.state = 'walking'
         new_direction = pygame.math.Vector2(
             pygame.math.Vector2(self.target.rect.centerx, self.target.rect.centery) - \
             pygame.math.Vector2(self.rect.centerx, self.rect.centery)
@@ -65,4 +89,5 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self, dt):
         self.move(dt)
-        
+
+        self.image = self.animation.get_sprite(self.state)

@@ -14,11 +14,11 @@ class Animation:
         to animate according to the current state 
         of an entity.
         """
-        
-        if self.current_frame > len(self.sprites[self.state]) - 1:
+
+        if self.current_frame > len(self.sprites[current_state]) - 1:
             self.current_frame = 0
 
-        sprite = self.sprites[self.state][int(self.current_frame)]
+        sprite = self.sprites[current_state][int(self.current_frame)]
         self.current_frame += self.speed
 
         return sprite

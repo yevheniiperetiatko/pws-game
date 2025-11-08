@@ -15,23 +15,30 @@ class Game():
     def __init__(self):
         pygame.init()
         
+        # display and mouse
         self.display_surf = pygame.display.set_mode((0,0), (pygame.FULLSCREEN))
         pygame.display.set_caption('Survivors')
         pygame.mouse.set_visible(False)
         
+        # time
         self.clock = pygame.time.Clock()
         self.running = True
         
+        self.convert_frames()
+
         self.all_coins = pygame.sprite.Group()
         self.all_sprites = AllSprites()
 
         self.background = Background((0,0), self.all_sprites)
         self.player = Player((400,400), self.all_sprites)
+        
+        # hud
         self.crosshair = Crosshair(self.all_sprites.offset)
         self.coin_counter = CoinCounter(self.player.coin_amount)
         self.healthbar_frame = HealthBarFrame()
         self.manabar_frame = ManaBarFrame()
 
+        # TODO: reorganize
         # generate enemies
         self.enemies = self.generate_enemies()
         self.bullets = pygame.sprite.Group()
@@ -39,18 +46,18 @@ class Game():
     def generate_enemies(self):
         enemies = pygame.sprite.Group()
 
-        for _ in range(100):
+        for _ in range(1):
             # skeleton spawn
             enemies.add(
-               Enemy(self.all_sprites, self.player, 'skeleton.png', 150, health=SKELETON_HEALTH, damage=SKELETON_DAMAGE)
+               Enemy(self.all_sprites, self.player, 'skeleton.png', 150, SKELETON_HEALTH, SKELETON_DAMAGE, SKELETON_SIZE, 'skeleton')
             )
             # zombie spawn
             enemies.add(
-                Enemy(self.all_sprites, self.player, 'zombie.png', 70, health=ZOMBIE_HEALTH, damage=ZOMBIE_DAMAGE)
+                Enemy(self.all_sprites, self.player, 'zombie.png', 70, ZOMBIE_HEALTH, ZOMBIE_DAMAGE, ZOMBIE_SIZE, 'zombie')
             )
             # slime spawn
             enemies.add(
-                Enemy(self.all_sprites, self.player, 'slime.png', 100, width=70, height=50, health=SLIME_HEALTH, damage=SLIME_DAMAGE)
+                Enemy(self.all_sprites, self.player, 'slime.png', 100, SLIME_HEALTH, SLIME_DAMAGE, SLIME_SIZE, 'slime')
             )
 
         return enemies
@@ -97,6 +104,19 @@ class Game():
             for coin in collided_coins:
                 self.player.coin_amount += 1
                 coin.kill()
+    
+    def convert_frames(self):
+        frame_groups = (
+            PLAYER_SPRITES,
+            ZOMBIE_SPRITES,
+            SKELETON_SPRITES,
+            SLIME_SPRITES
+        )
+        
+        for group in frame_groups:
+            for state, frames in group.items():
+                for i in range(len(frames)):
+                    frames[i] = frames[i].convert_alpha()
 
     def loop(self):
         while self.running:
