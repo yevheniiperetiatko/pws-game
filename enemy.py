@@ -57,7 +57,7 @@ class Enemy(pygame.sprite.Sprite):
         )
  
         self.image = self.sprites_group[self.state][self.animation.current_frame]
-
+    
         self.pos = pos if pos is not None else self.get_spawn_position()
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
 
@@ -65,14 +65,26 @@ class Enemy(pygame.sprite.Sprite):
         self.target = target
 
         self.should_mirror = False
+        self.was_hit = False
+        self.make_red_duration = 0
 
     def on_hit(self, bullet_damage, all_coins):
+        self.was_hit = True
+            
         self.health -= bullet_damage
+            
+        self.make_red_duration = ENEMY_MAKE_RED_DURATION
+        self.make_red(self.image) 
 
         if self.health <= 0:
             all_coins.add(Coin(self.groups, self.rect.center, self.groups.offset))
             self.kill()
-
+        
+    def make_red(self, sprite):
+        self.red_sprite = sprite.copy()
+        self.red_sprite.fill((200, 10, 20), special_flags=pygame.BLEND_MULT)
+        self.image = self.red_sprite
+        
     def get_spawn_position(self) -> tuple:
         """
         Method calculates a random spawning position for an enemy. 
@@ -98,4 +110,12 @@ class Enemy(pygame.sprite.Sprite):
     def update(self, dt):
         self.move(dt)
 
-        self.image = self.animation.get_sprite(self.state, self.should_mirror)
+        if self.was_hit:
+            self.make_red_duration -= dt
+
+        if self.make_red_duration <= 0:
+            self.was_hit = False
+
+        if not self.was_hit:
+            self.image = self.animation.get_sprite(self.state, self.should_mirror)
+        

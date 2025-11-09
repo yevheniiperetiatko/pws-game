@@ -52,6 +52,9 @@ ZOMBIE_SIZE = (60, 80)
 SKELETON_SIZE = (60, 90)
 SLIME_SIZE = (75, 50)
 
+# enemy make red duration
+ENEMY_MAKE_RED_DURATION = 0.1
+
 # SPRITES
 PLAYER_SPRITES = {
     'idle': load_frames("sprites/player/idle", PLAYER_SIZE),
