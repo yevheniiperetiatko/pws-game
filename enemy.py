@@ -78,8 +78,9 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.health <= 0:
             all_coins.add(Coin(self.groups, self.rect.center, self.groups.offset))
+            self.state = 'dying'
             self.kill()
-        
+
     def make_red(self, sprite):
         self.red_sprite = sprite.copy()
         self.red_sprite.fill((200, 10, 20), special_flags=pygame.BLEND_MULT)
@@ -88,7 +89,7 @@ class Enemy(pygame.sprite.Sprite):
     def get_spawn_position(self) -> tuple:
         """
         Method calculates a random spawning position for an enemy. 
-        """
+        """ 
         return (randint(-300, 0), randint(-300, 0))
 
     def move(self, dt):
