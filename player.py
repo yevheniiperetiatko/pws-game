@@ -27,6 +27,7 @@ class Player(pygame.sprite.Sprite):
 
         self.health = PLAYER_HEALTH
         self.coin_amount = 0
+        self.mana = PLAYER_MANA
 
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
         
@@ -67,12 +68,17 @@ class Player(pygame.sprite.Sprite):
             groups.offset
         )
 
+        self.mana -= 10
+
         return projectile
 
     def move(self, dt):
         self.rect.center += self.direction * self.speed * dt
 
-    def update(self, dt):
+    def update(self, dt):    
+        if self.mana <= 100:
+            self.mana += 0.05
+
         self.input()
         self.move(dt)
         

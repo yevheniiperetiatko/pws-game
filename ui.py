@@ -94,3 +94,25 @@ class HealthBar:
 
         self.image = pygame.transform.scale(self.image, (self.width, 20))
         self.display_surface.blit(self.image, self.pos)
+
+class ManaBar:
+    def __init__(self):
+        self.width = 162 # 162
+
+        self.image = pygame.transform.scale(
+            pygame.image.load('sprites/manabar.png').convert_alpha(),
+            (self.width-3, 26-3)
+        )
+
+        self.pos = (81, 137)
+        self.rect = self.image.get_frect(center=self.pos)
+        self.display_surface = pygame.display.get_surface()
+        
+    def draw(self, player_mana):
+        self.width = player_mana * 1.62
+
+        if self.width < 0:
+            self.width = 0
+        
+        self.image = pygame.transform.scale(self.image, (self.width, 20))
+        self.display_surface.blit(self.image, self.pos)

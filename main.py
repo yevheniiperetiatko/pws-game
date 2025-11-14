@@ -38,6 +38,7 @@ class Game():
         self.healthbar_frame = HealthBarFrame()
         self.manabar_frame = ManaBarFrame()
         self.healthbar = HealthBar()
+        self.manabar = ManaBar()
 
         # TODO: reorganize
         # generate enemies
@@ -131,8 +132,9 @@ class Game():
 
                 # if the player presses LMB spawn a projectile. shooting
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    projectile = self.player.shoot(self.all_sprites)
-                    self.bullets.add(projectile)
+                    if self.player.mana >= 10:      
+                        projectile = self.player.shoot(self.all_sprites)
+                        self.bullets.add(projectile)
             
             self.all_sprites.update(dt)
             self.coin_counter.update(self.player.coin_amount)
@@ -147,6 +149,7 @@ class Game():
             self.manabar_frame.draw()
             self.crosshair.draw()
             self.healthbar.draw(self.player.health)
+            self.manabar.draw(self.player.mana)
 
             # collision between bullet and enemies
             self.handle_bullet_enemies_collision()
