@@ -62,19 +62,23 @@ ENEMY_MAKE_RED_DURATION = 0.1
 PLAYER_SPRITES = {
     'idle': load_frames("sprites/player/idle", PLAYER_SIZE),
     'walking': load_frames("sprites/player/walking", PLAYER_SIZE),
+    'dying': load_frames("sprites/slime/dying", SLIME_SIZE),
 }
 
 ZOMBIE_SPRITES = {
     'idle': load_frames("sprites/zombie/idle", ZOMBIE_SIZE),
-    'walking': load_frames("sprites/zombie/walking", ZOMBIE_SIZE)
+    'walking': load_frames("sprites/zombie/walking", ZOMBIE_SIZE),
+    'dying': load_frames("sprites/zombie/dying", ZOMBIE_SIZE),
 }
 
 SKELETON_SPRITES = {
     'idle': load_frames("sprites/skeleton/idle", SKELETON_SIZE),
-    'walking': load_frames("sprites/skeleton/walking", SKELETON_SIZE)
+    'walking': load_frames("sprites/skeleton/walking", SKELETON_SIZE),
+    'dying': load_frames("sprites/skeleton/dying", SKELETON_SIZE),
 }
 
 SLIME_SPRITES = {
     'idle': load_frames("sprites/slime/idle", SLIME_SIZE),
-    'walking': load_frames("sprites/slime/walking", SLIME_SIZE)
+    'walking': load_frames("sprites/slime/walking", SLIME_SIZE),
+    'dying': load_frames("sprites/slime/dying", SLIME_SIZE),
 }

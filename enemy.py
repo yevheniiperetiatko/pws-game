@@ -68,6 +68,8 @@ class Enemy(pygame.sprite.Sprite):
         self.was_hit = False
         self.make_red_duration = 0
 
+        self.death_start_time = 0
+
     def on_hit(self, bullet_damage, all_coins):
         self.was_hit = True
             
@@ -78,8 +80,10 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.health <= 0:
             all_coins.add(Coin(self.groups, self.rect.center, self.groups.offset))
-            self.kill()
-        
+            self.state = 'dying'
+            self.death_start_time = pygame.time.get_ticks()
+            self.current_frame = 0
+
     def make_red(self, sprite):
         self.red_sprite = sprite.copy()
         self.red_sprite.fill((200, 10, 20), special_flags=pygame.BLEND_MULT)
@@ -88,10 +92,13 @@ class Enemy(pygame.sprite.Sprite):
     def get_spawn_position(self) -> tuple:
         """
         Method calculates a random spawning position for an enemy. 
-        """
+        """ 
         return (randint(-300, 0), randint(-300, 0))
 
     def move(self, dt):
+        if self.state == 'dying':
+            return
+
         self.state = 'walking'
         new_direction = pygame.math.Vector2(
             pygame.math.Vector2(self.target.rect.centerx, self.target.rect.centery) - \
@@ -108,7 +115,12 @@ class Enemy(pygame.sprite.Sprite):
             self.should_mirror = False
 
     def update(self, dt):
-        self.move(dt)
+        if self.state == 'dying':
+            if pygame.time.get_ticks() - self.death_start_time >= 1450:
+                self.kill()
+            
+        if self.state != 'dying':
+            self.move(dt)
 
         if self.was_hit:
             self.make_red_duration -= dt
