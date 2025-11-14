@@ -37,6 +37,7 @@ class Game():
         self.coin_counter = CoinCounter(self.player.coin_amount)
         self.healthbar_frame = HealthBarFrame()
         self.manabar_frame = ManaBarFrame()
+        self.healthbar = HealthBar()
 
         # TODO: reorganize
         # generate enemies
@@ -145,6 +146,7 @@ class Game():
             self.healthbar_frame.draw()
             self.manabar_frame.draw()
             self.crosshair.draw()
+            self.healthbar.draw(self.player.health)
 
             # collision between bullet and enemies
             self.handle_bullet_enemies_collision()

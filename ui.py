@@ -72,3 +72,25 @@ class ManaBarFrame:
 
     def draw(self):
         self.display_surface.blit(self.image, self.pos)
+
+class HealthBar:
+    def __init__(self):
+        self.width = 220 # 220
+
+        self.image = pygame.transform.scale(
+            pygame.image.load('sprites/healthbar.png').convert_alpha(),
+            (self.width, 20)
+        )
+
+        self.pos = (86, 55)
+        self.rect = self.image.get_frect(center=self.pos)
+        self.display_surface = pygame.display.get_surface()
+    
+    def draw(self, player_health):
+        self.width = player_health * 2.2
+
+        if self.width <= 0:
+            self.width = 0
+
+        self.image = pygame.transform.scale(self.image, (self.width, 20))
+        self.display_surface.blit(self.image, self.pos)
