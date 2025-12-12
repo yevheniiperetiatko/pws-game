@@ -22,9 +22,6 @@ def load_frames(folder, size=None):
 
     return frames
 
-WINDOW_WIDTH = 1300# 1920
-WINDOW_HEIGHT = 880 # 1080
-
 # enemies health
 PLAYER_HEALTH = 100
 SLIME_HEALTH = 30
@@ -58,6 +55,9 @@ SLIME_SIZE = (75, 50)
 # enemy make red duration
 ENEMY_MAKE_RED_DURATION = 0.1
 
+# state
+game_state = 'menu'
+
 # SPRITES
 PLAYER_SPRITES = {
     'idle': load_frames("sprites/player/idle", PLAYER_SIZE),
@@ -81,4 +81,59 @@ SLIME_SPRITES = {
     'idle': load_frames("sprites/slime/idle", SLIME_SIZE),
     'walking': load_frames("sprites/slime/walking", SLIME_SIZE),
     'dying': load_frames("sprites/slime/dying", SLIME_SIZE),
+}
+
+# waves
+waves = {
+    1: {
+        "zomb_amount": 3,
+        "skelet_amount": 3,
+        "slime_amount": 3,  
+    },
+    2: {
+        "zomb_amount": 7,
+        "skelet_amount": 2,
+        "slime_amount": 5,  
+    },
+    3: {
+        "zomb_amount": 16,
+        "skelet_amount": 12,
+        "slime_amount": 20,  
+    },
+    4: {
+        "zomb_amount": 25,
+        "skelet_amount": 25,
+        "slime_amount": 25,  
+    },
+    5: {
+        "zomb_amount": 30,
+        "skelet_amount": 40,
+        "slime_amount": 50,  
+    },
+    6: {
+        "zomb_amount": 50,
+        "skelet_amount": 45,
+        "slime_amount": 60,  
+    },
+    7: {
+        "zomb_amount": 70,
+        "skelet_amount": 60,
+        "slime_amount": 70,  
+    },
+    8: {
+        "zomb_amount": 80,
+        "skelet_amount": 80,
+        "slime_amount": 80,  
+    },
+    9: {
+        "zomb_amount": 99,
+        "skelet_amount": 99,
+        "slime_amount": 99,  
+    },
+    10: {
+        "zomb_amount": 7,
+        "skelet_amount": 2,
+        "slime_amount": 5,  
+    },
+
 }

@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
         
         self.direction = pygame.math.Vector2()
-        self.speed = 500
+        self.speed = 600
 
         self.should_mirror = False
         self.invulnerable = False
@@ -75,9 +75,10 @@ class Player(pygame.sprite.Sprite):
     def move(self, dt):
         self.rect.center += self.direction * self.speed * dt
 
-    def update(self, dt):    
+    def update(self, dt):
+        print(self.rect.centerx, self.rect.centery)
         if self.mana <= 100:
-            self.mana += 0.10
+            self.mana += 0.15
 
         self.input()
         self.move(dt)

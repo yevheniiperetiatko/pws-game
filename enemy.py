@@ -1,7 +1,7 @@
 import pygame
 import math
+import random
 
-from random import randint
 from coin import Coin
 from animation import Animation
 
@@ -96,7 +96,7 @@ class Enemy(pygame.sprite.Sprite):
         """
         Method calculates a random spawning position for an enemy. 
         """ 
-        return (randint(-300, 0), randint(-300, 0))
+        return (random.randint(-300, 0), random.randint(-300, 0))
 
     def move(self, dt):
         if self.state == 'dying':
