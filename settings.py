@@ -62,7 +62,7 @@ ENEMY_MAKE_RED_DURATION = 0.1
 PLAYER_SPRITES = {
     'idle': load_frames("sprites/player/idle", PLAYER_SIZE),
     'walking': load_frames("sprites/player/walking", PLAYER_SIZE),
-    'dying': load_frames("sprites/slime/dying", SLIME_SIZE),
+    'dying': load_frames("sprites/slime/dying", PLAYER_SIZE),
 }
 
 ZOMBIE_SPRITES = {

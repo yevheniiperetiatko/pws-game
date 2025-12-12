@@ -68,7 +68,7 @@ class Player(pygame.sprite.Sprite):
             groups.offset
         )
 
-        self.mana -= 10
+        self.mana -= 8
 
         return projectile
 
@@ -77,7 +77,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt):    
         if self.mana <= 100:
-            self.mana += 0.05
+            self.mana += 0.10
 
         self.input()
         self.move(dt)

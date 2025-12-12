@@ -75,7 +75,7 @@ class ManaBarFrame:
 
 class HealthBar:
     def __init__(self):
-        self.width = 220 # 220
+        self.width = 220
 
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/healthbar.png').convert_alpha(),

@@ -71,6 +71,9 @@ class Enemy(pygame.sprite.Sprite):
         self.death_start_time = 0
 
     def on_hit(self, bullet_damage, all_coins):
+        if self.state == 'dying':
+            return
+            
         self.was_hit = True
             
         self.health -= bullet_damage
