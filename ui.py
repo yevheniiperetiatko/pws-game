@@ -3,7 +3,9 @@ import pygame
 
 pygame.init()
 
-font = pygame.font.Font('fonts/font.ttf', 30)
+FONT_PATH = 'fonts/font.ttf'
+money_amount_font = pygame.font.Font(FONT_PATH, 30)
+watch_time_font = pygame.font.Font(FONT_PATH, 50)
 
 class Crosshair:
     def __init__(self, offset):
@@ -37,7 +39,7 @@ class CoinCounter:
         self.rect = self.image.get_frect(center=self.pos)
     
     def draw(self):
-        self.coin_amount_text = font.render(f'{self.amount}', True, (250, 185, 5))
+        self.coin_amount_text = money_amount_font.render(f'{self.amount}', True, (250, 185, 5))
 
         self.display_surface.blit(self.image, self.pos)
         self.display_surface.blit(self.coin_amount_text, self.coin_amount_pos)
@@ -116,3 +118,33 @@ class ManaBar:
         
         self.image = pygame.transform.scale(self.image, (self.width, 20))
         self.display_surface.blit(self.image, self.pos)
+
+class Watch:
+    def __init__(self):
+        self.time_elapsed = 0
+        
+        self.minutes = 0
+        self.seconds = 0
+
+        self.display_surface = pygame.display.get_surface()
+        self.pos = (self.display_surface.width / 2.2, 50)
+
+    def draw(self, dt):
+        self.time_elapsed += dt
+        
+        self.minutes = int(self.time_elapsed // 60)
+        self.seconds = int(self.time_elapsed % 60)
+
+        if self.seconds >= 10:
+            self.seconds_text = str(self.seconds)
+        else:
+            self.seconds_text = f'0{self.seconds}'
+
+        if self.minutes >= 10:
+            self.minutes_text = str(self.minutes)
+        else:
+            self.minutes_text = f'0{self.minutes}'
+        
+        self.time_text = watch_time_font.render(f'{self.minutes_text} : {self.seconds_text}', True, (255, 255, 255))
+
+        self.display_surface.blit(self.time_text, self.pos)

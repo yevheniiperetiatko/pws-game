@@ -42,6 +42,7 @@ class Game():
         self.manabar_frame = ManaBarFrame()
         self.healthbar = HealthBar()
         self.manabar = ManaBar()
+        self.watch = Watch()
 
         # TODO: reorganize
 
@@ -49,6 +50,10 @@ class Game():
         self.bullets = pygame.sprite.Group()
 
         self.enemies = pygame.sprite.Group()
+
+        self.time_elapsed = 0
+        self.enemies_amount = 3
+        self.last_spawn_second = -1
 
     def handle_enemies_colisions(self):
         collisions = pygame.sprite.groupcollide(self.enemies, self.enemies, False, False)
@@ -118,7 +123,7 @@ class Game():
     def loop(self):
         self.menu.run()
         self.wave_manager = WaveManager(self.background.rect.width, self.background.rect.height)
-
+        
         while self.running:
             # dt
             dt = self.clock.tick(180) / 1000
@@ -134,7 +139,17 @@ class Game():
                         projectile = self.player.shoot(self.all_sprites)
                         self.bullets.add(projectile)
 
-            self.wave_manager.spawn_enemies(self.all_sprites, self.player, self.enemies)
+            # spawn every n seconds 
+            if self.watch.seconds in (0, 20, 40, 60) and self.watch.seconds != self.last_spawn_second:
+                self.wave_manager.spawn_enemies(
+                    self.all_sprites, 
+                    self.player, 
+                    self.enemies, 
+                    self.enemies_amount
+                )
+
+                self.last_spawn_second = self.watch.seconds
+                self.enemies_amount += 2
 
             self.all_sprites.update(dt)
             self.coin_counter.update(self.player.coin_amount)
@@ -150,6 +165,7 @@ class Game():
             self.crosshair.draw()
             self.healthbar.draw(self.player.health)
             self.manabar.draw(self.player.mana)
+            self.watch.draw(dt)
 
             # collision between bullet and enemies
             self.handle_bullet_enemies_collision()

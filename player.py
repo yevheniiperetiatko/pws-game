@@ -76,7 +76,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.center += self.direction * self.speed * dt
 
     def update(self, dt):
-        print(self.rect.centerx, self.rect.centery)
         if self.mana <= 100:
             self.mana += 0.15
 
