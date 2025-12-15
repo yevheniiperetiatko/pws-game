@@ -19,7 +19,7 @@ class Game():
     
         # display and mouse
         self.display_surf = pygame.display.set_mode((0,0), (pygame.FULLSCREEN))
-        pygame.display.set_caption('Survivors')
+        pygame.display.set_caption('Wandering Witch')
         pygame.mouse.set_visible(False)
         
         # time
@@ -122,8 +122,9 @@ class Game():
 
     def loop(self):
         self.menu.run()
+        self.clock.tick()
         self.wave_manager = WaveManager(self.background.rect.width, self.background.rect.height)
-        
+
         while self.running:
             # dt
             dt = self.clock.tick(180) / 1000

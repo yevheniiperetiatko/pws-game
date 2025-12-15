@@ -35,4 +35,3 @@ class WaveManager:
             enemies.add(
                 Enemy(all_sprites, player, 'slime.png', 115, SLIME_HEALTH, SLIME_DAMAGE, SLIME_SIZE, 'slime', self.get_spawn_chords())
             )
-        print(len(enemies))

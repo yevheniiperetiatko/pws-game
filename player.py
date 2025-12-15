@@ -73,6 +73,18 @@ class Player(pygame.sprite.Sprite):
         return projectile
 
     def move(self, dt):
+        if self.rect.y <= -1960:
+            self.rect.y = -1960
+
+        elif self.rect.y >= 2000:
+            self.rect.y = 2000
+        
+        if self.rect.x >= 2376:
+            self.rect.x = 2376
+        
+        elif self.rect.x <= -2444:
+            self.rect.x = -2444
+
         self.rect.center += self.direction * self.speed * dt
 
     def update(self, dt):
