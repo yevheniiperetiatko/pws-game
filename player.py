@@ -32,11 +32,14 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
         
         self.direction = pygame.math.Vector2()
-        self.speed = 600
+        self.speed = 400
 
         self.should_mirror = False
         self.invulnerable = False
         self.invuln_timer = 0.0
+
+        self.make_red_duration = 0
+        self.was_hit = False
 
     def input(self):
         self.keys = pygame.key.get_pressed()
@@ -72,6 +75,30 @@ class Player(pygame.sprite.Sprite):
 
         return projectile
 
+    def on_hit(self, enemy, audio, dt):
+        audio.play('witch_hurt')
+
+        if not self.invulnerable:
+            self.make_red_duration = PLAYER_MAKE_RED_DURATION
+            self.make_red(self.image)
+            
+            self.health -= enemy.damage
+            self.invulnerable = True
+            self.invuln_timer = INVULN_TIME
+            
+            self.was_hit = True
+        else:
+            self.invuln_timer -= dt
+            if self.invuln_timer <= 0:
+                self.invulnerable = False
+        
+        if self.health <= 0: self.kill()
+    
+    def make_red(self, sprite):
+        self.red_sprite = sprite.copy()
+        self.red_sprite.fill((200, 10, 20), special_flags=pygame.BLEND_MULT)
+        self.image = self.red_sprite
+
     def move(self, dt):
         if self.rect.y <= -1960:
             self.rect.y = -1960
@@ -99,7 +126,14 @@ class Player(pygame.sprite.Sprite):
         else:
             self.state = 'walking'
         
-        self.image = self.animation.get_sprite(self.state, self.should_mirror)
+        if self.was_hit:
+            self.make_red_duration -= dt
+
+        if self.make_red_duration <= 0:
+            self.was_hit = False
+
+        if not self.was_hit:
+            self.image = self.animation.get_sprite(self.state, self.should_mirror)
 
         
 

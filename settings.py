@@ -54,6 +54,8 @@ SLIME_SIZE = (75, 50)
 
 # enemy make red duration
 ENEMY_MAKE_RED_DURATION = 0.1
+# player make red duration
+PLAYER_MAKE_RED_DURATION = 0.1
 
 enemies_factor = 1
 

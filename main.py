@@ -7,16 +7,17 @@ from ui import *
 from coin import Coin
 from player import Player
 from enemy import Enemy
+from menu import Menu
 from projectile import Projectile
 from all_sprites import AllSprites
 from background import Background
-from menu import Menu
 from wave_manager import WaveManager
+from audio_manager import AudioManager
 
 class Game():
     def __init__(self):
         pygame.init()
-    
+
         # display and mouse
         self.display_surf = pygame.display.set_mode((0,0), (pygame.FULLSCREEN))
         pygame.display.set_caption('Wandering Witch')
@@ -33,6 +34,8 @@ class Game():
 
         self.background = Background((0,0), self.all_sprites)
         self.player = Player((400,400), self.all_sprites)
+
+        self.audio = AudioManager()
         
         # hud
         self.menu = Menu(pygame)
@@ -87,18 +90,9 @@ class Game():
         player_enemy_collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
         for enemy in player_enemy_collisions:
             if enemy.state == 'dying':
-                continue 
-
-            if not self.player.invulnerable:
-                self.player.health -= enemy.damage
-                self.player.invulnerable = True
-                self.player.invuln_timer = INVULN_TIME
-            else:
-                self.player.invuln_timer -= dt
-                if self.player.invuln_timer <= 0:
-                    self.player.invulnerable = False
+                continue
             
-            if self.player.health <= 0: self.player.kill()
+            self.player.on_hit(enemy, self.audio, dt)
     
     def handle_player_coins_collision(self):
         collided_coins = pygame.sprite.spritecollide(self.player, self.all_coins, False)
@@ -124,6 +118,8 @@ class Game():
         self.menu.run()
         self.clock.tick()
         self.wave_manager = WaveManager(self.background.rect.width, self.background.rect.height)
+
+        self.audio.play_music('fight hero.wav')
 
         while self.running:
             # dt
