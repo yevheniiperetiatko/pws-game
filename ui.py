@@ -7,36 +7,44 @@ FONT_PATH = 'fonts/font.ttf'
 money_amount_font = pygame.font.Font(FONT_PATH, 30)
 watch_time_font = pygame.font.Font(FONT_PATH, 50)
 
-class Crosshair:
-    def __init__(self, offset):
+class UIElement:
+    def __init__(self, image_path, scale_size, pos):
         self.image = pygame.transform.scale(
-            pygame.image.load('sprites/crosshair.png').convert_alpha(),
-            (60, 60)
+            pygame.image.load(f'{image_path}').convert_alpha(),
+            scale_size,#(60, 60)
         )
 
-        self.pos = pygame.mouse.get_pos()
+        self.pos = pos
         self.rect = self.image.get_frect(center=self.pos)
         self.display_surface = pygame.display.get_surface()
+
+    def draw(self):
+        self.display_surface.blit(self.image, self.pos)
+
+class Crosshair(UIElement):
+    def __init__(self, offset):
+        super().__init__(
+            "sprites/crosshair.png",
+            (60, 60),
+            pygame.mouse.get_pos(),
+        )
+
         self.offset = offset
 
     def draw(self):
         self.rect.center = pygame.mouse.get_pos() - self.offset
         self.display_surface.blit(self.image, self.rect.topleft + self.offset)
 
-class CoinCounter:
+class CoinCounter(UIElement):
     def __init__(self, amount):
-        self.image = pygame.transform.scale(
-            pygame.image.load('sprites/coin_counter.png').convert_alpha(),
-            (145, 70)
+        super().__init__(
+            "sprites/coin_counter.png",
+            (145, 70),
+            (20, 200),
         )
-        
-        self.display_surface = pygame.display.get_surface()
 
         self.amount = amount
         self.coin_amount_pos = (90, 222)
-
-        self.pos = (20, 200)
-        self.rect = self.image.get_frect(center=self.pos)
     
     def draw(self):
         self.coin_amount_text = money_amount_font.render(f'{self.amount}', True, (250, 185, 5))
@@ -47,46 +55,31 @@ class CoinCounter:
     def update(self, amount):
         self.amount = amount
 
-class HealthBarFrame:
+class HealthBarFrame(UIElement):
     def __init__(self):
-        self.image = pygame.transform.scale(
-            pygame.image.load('sprites/healthbar_frame.png').convert_alpha(),
-            (400, 100)
+        super().__init__(
+            'sprites/healthbar_frame.png',
+            (400, 100),
+            (5, 20)
         )
 
-        self.pos = (5, 20)
-        self.rect = self.image.get_frect(center=self.pos)
-        self.display_surface = pygame.display.get_surface()
-
-    def draw(self):
-        self.display_surface.blit(self.image, self.pos)
-
-class ManaBarFrame:
+class ManaBarFrame(UIElement):
     def __init__(self):
-        self.image = pygame.transform.scale(
-            pygame.image.load('sprites/manabar_frame.png').convert_alpha(),
-            (300, 250)
+        super().__init__(
+            'sprites/manabar_frame.png',
+            (300, 250),
+            (2, 17)
         )
 
-        self.pos = (2, 17)
-        self.rect = self.image.get_frect(center=self.pos)
-        self.display_surface = pygame.display.get_surface()
-
-    def draw(self):
-        self.display_surface.blit(self.image, self.pos)
-
-class HealthBar:
+class HealthBar(UIElement):
     def __init__(self):
+        super().__init__(
+            'sprites/healthbar.png',
+            (220, 20),
+            (86, 55)
+        )
+        
         self.width = 220
-
-        self.image = pygame.transform.scale(
-            pygame.image.load('sprites/healthbar.png').convert_alpha(),
-            (self.width, 20)
-        )
-
-        self.pos = (86, 55)
-        self.rect = self.image.get_frect(center=self.pos)
-        self.display_surface = pygame.display.get_surface()
     
     def draw(self, player_health):
         self.width = player_health * 2.2
@@ -97,19 +90,15 @@ class HealthBar:
         self.image = pygame.transform.scale(self.image, (self.width, 20))
         self.display_surface.blit(self.image, self.pos)
 
-class ManaBar:
+class ManaBar(UIElement):
     def __init__(self):
-        self.width = 162 # 162
-
-        self.image = pygame.transform.scale(
-            pygame.image.load('sprites/manabar.png').convert_alpha(),
-            (self.width-3, 26-3)
+        super().__init__(
+            'sprites/manabar.png',
+            (159, 20),
+            (81, 137)
         )
+        self.width = 159
 
-        self.pos = (81, 137)
-        self.rect = self.image.get_frect(center=self.pos)
-        self.display_surface = pygame.display.get_surface()
-        
     def draw(self, player_mana):
         self.width = player_mana * 1.62
 
