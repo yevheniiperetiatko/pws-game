@@ -76,9 +76,9 @@ class Player(pygame.sprite.Sprite):
         return projectile
 
     def on_hit(self, enemy, audio, dt):
-        audio.play('witch_hurt')
-
         if not self.invulnerable:
+            audio.play('witch_hurt')
+
             self.make_red_duration = PLAYER_MAKE_RED_DURATION
             self.make_red(self.image)
             
