@@ -6,6 +6,7 @@ from ui import Button
 class Menu:
     def __init__(self, pygame):
         self.pygame = pygame
+
         self.play_button = Button(
             (1500, 500),
             300,
@@ -38,7 +39,11 @@ class Menu:
                 
                 for button in self.buttons:
                     if button.is_clicked(event):
-                        return
+                        if button.text == 'PLAY':
+                            return
+                        if button.text == 'QUIT':
+                            pygame.quit()
+                            sys.exit()
             
             for button in self.buttons:
                 button.draw()
