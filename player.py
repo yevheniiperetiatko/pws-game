@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.FRect(self.pos, (self.image.get_width(), self.image.get_height()))
         
         self.direction = pygame.math.Vector2()
-        self.speed = 400
+        self.speed = PLAYER_SPEED
 
         self.should_mirror = False
         self.invulnerable = False
@@ -87,13 +87,14 @@ class Player(pygame.sprite.Sprite):
             self.invuln_timer = INVULN_TIME
             
             self.was_hit = True
+            
         else:
             self.invuln_timer -= dt
             if self.invuln_timer <= 0:
                 self.invulnerable = False
         
         if self.health <= 0: self.kill()
-    
+
     def make_red(self, sprite):
         self.red_sprite = sprite.copy()
         self.red_sprite.fill((200, 10, 20), special_flags=pygame.BLEND_MULT)
@@ -114,7 +115,7 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.center += self.direction * self.speed * dt
 
-    def update(self, dt):
+    def update(self, dt):        
         if self.mana <= 100:
             self.mana += 0.15
 
@@ -134,7 +135,3 @@ class Player(pygame.sprite.Sprite):
 
         if not self.was_hit:
             self.image = self.animation.get_sprite(self.state, self.should_mirror)
-
-        
-
-        
