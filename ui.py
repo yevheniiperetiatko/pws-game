@@ -8,11 +8,12 @@ money_amount_font = pygame.font.Font(FONT_PATH, 30)
 watch_time_font = pygame.font.Font(FONT_PATH, 50)
 
 class UIElement:
-    def __init__(self, image_path, scale_size, pos):
-        self.image = pygame.transform.scale(
-            pygame.image.load(f'{image_path}').convert_alpha(),
-            scale_size,#(60, 60)
-        )
+    def __init__(self, scale_size, pos, image_path=None):
+        if image_path != None:
+            self.image = pygame.transform.scale(
+                pygame.image.load(f'{image_path}').convert_alpha(),
+                scale_size,
+            )
 
         self.pos = pos
         self.rect = self.image.get_frect(center=self.pos)
@@ -21,12 +22,50 @@ class UIElement:
     def draw(self):
         self.display_surface.blit(self.image, self.pos)
 
+
+class Button:
+    def __init__(
+        self,
+        pos,
+        width,
+        height,
+        text,
+        text_size,
+        color,
+    ):
+        self.pos = pos
+        self.width = width
+        self.height = height
+        self.text = text
+        self.text_size = text_size
+        self.color = color
+
+        self.rect = pygame.FRect(pos[0], pos[1], self.width, self.height)
+        self.font = pygame.font.Font(FONT_PATH, self.text_size)
+        
+        self.display_surface = pygame.display.get_surface()
+
+    def draw(self):
+        pygame.draw.rect(self.display_surface, self.color, self.rect)
+
+        text_surface = self.font.render(self.text, True, (0, 0, 0))
+        text_rect = text_surface.get_rect(center=self.rect.center)
+
+        self.display_surface.blit(text_surface, text_rect)
+
+    def is_clicked(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos):
+                return True
+        return False
+
+
 class Crosshair(UIElement):
     def __init__(self, offset):
         super().__init__(
-            "sprites/crosshair.png",
             (60, 60),
             pygame.mouse.get_pos(),
+            "sprites/crosshair.png",
         )
 
         self.offset = offset
@@ -35,12 +74,13 @@ class Crosshair(UIElement):
         self.rect.center = pygame.mouse.get_pos() - self.offset
         self.display_surface.blit(self.image, self.rect.topleft + self.offset)
 
+
 class CoinCounter(UIElement):
     def __init__(self, amount):
         super().__init__(
-            "sprites/coin_counter.png",
             (145, 70),
             (20, 200),
+            "sprites/coin_counter.png",
         )
 
         self.amount = amount
@@ -55,28 +95,31 @@ class CoinCounter(UIElement):
     def update(self, amount):
         self.amount = amount
 
+
 class HealthBarFrame(UIElement):
     def __init__(self):
         super().__init__(
-            'sprites/healthbar_frame.png',
             (400, 100),
-            (5, 20)
+            (5, 20),
+            'sprites/healthbar_frame.png',
         )
+
 
 class ManaBarFrame(UIElement):
     def __init__(self):
         super().__init__(
-            'sprites/manabar_frame.png',
             (300, 250),
-            (2, 17)
+            (2, 17),
+            'sprites/manabar_frame.png',
         )
+
 
 class HealthBar(UIElement):
     def __init__(self):
         super().__init__(
-            'sprites/healthbar.png',
             (220, 20),
-            (86, 55)
+            (86, 55),
+            'sprites/healthbar.png',
         )
         
         self.width = 220
@@ -90,12 +133,13 @@ class HealthBar(UIElement):
         self.image = pygame.transform.scale(self.image, (self.width, 20))
         self.display_surface.blit(self.image, self.pos)
 
+
 class ManaBar(UIElement):
     def __init__(self):
         super().__init__(
-            'sprites/manabar.png',
             (159, 20),
-            (81, 137)
+            (81, 137),
+            'sprites/manabar.png',
         )
         self.width = 159
 
@@ -107,6 +151,7 @@ class ManaBar(UIElement):
         
         self.image = pygame.transform.scale(self.image, (self.width, 20))
         self.display_surface.blit(self.image, self.pos)
+
 
 class Watch:
     def __init__(self):

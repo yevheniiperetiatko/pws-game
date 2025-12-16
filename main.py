@@ -115,7 +115,7 @@ class Game():
                     frames[i] = frames[i].convert_alpha()
 
     def loop(self):
-        self.menu.run()
+        self.menu.run(self.crosshair)
         self.clock.tick()
         self.wave_manager = WaveManager(self.background.rect.width, self.background.rect.height)
 
