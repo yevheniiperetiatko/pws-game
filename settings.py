@@ -2,6 +2,9 @@ import pygame
 
 import os
 
+pygame.init()
+info = pygame.display.Info()
+
 def load_frames(folder, size=None):
     """
     Automatically loads all .png files from the given folder.
@@ -45,6 +48,7 @@ PLAYER_ANIMATION_SPEED = 0.025
 SKELETON_ANIMATION_SPEED = 0.025
 ZOMBIE_ANIMATION_SPEED = 0.03
 SLIME_ANIMATION_SPEED = 0.025
+MENU_BACKGROUND_ANIMATION_SPEED = 0.01
 
 # PLAYER WALKING SPEED
 PLAYER_SPEED = 400
@@ -91,3 +95,6 @@ SLIME_SPRITES = {
     'dying': load_frames("sprites/slime/dying", SLIME_SIZE),
 }
 
+MENU_BACKGROUND_SPRITES = {
+    'menu_background': load_frames("sprites/menu_background", (info.current_w, info.current_h))
+}
