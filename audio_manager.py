@@ -5,7 +5,8 @@ class AudioManager:
         pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
         
         self.sounds = {
-            "witch_hurt": pygame.mixer.Sound("sounds/witch_hurt.wav")
+            "witch_hurt": pygame.mixer.Sound("sounds/witch_hurt.wav"),
+            'coin_pickup': pygame.mixer.Sound("sounds/coin_pickup.wav"),
         }
 
         self.sounds['witch_hurt'].set_volume(0.1)

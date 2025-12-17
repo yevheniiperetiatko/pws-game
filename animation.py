@@ -5,6 +5,7 @@ class Animation:
     def __init__(self, state, speed, sprites):
         self.sprites = sprites
         self.state = state
+        self.current_state = None
         self.current_frame = 0
         self.death_anim_current_frame = 0
         self.speed = speed
@@ -19,7 +20,7 @@ class Animation:
         if self.current_frame > len(self.sprites[current_state]) - 1:
             self.current_frame = 0
 
-        if self.state == 'dying':
+        if current_state == 'dying':
             sprite = self.sprites[current_state][int(self.death_anim_current_frame)]
             self.death_anim_current_frame += self.speed
         else:

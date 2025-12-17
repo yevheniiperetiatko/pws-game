@@ -100,8 +100,11 @@ class Game():
         collided_coins = pygame.sprite.spritecollide(self.player, self.all_coins, False)
         if collided_coins:
             for coin in collided_coins:
+                coin.on_pick_up()
                 self.player.coin_amount += 1
                 coin.kill()
+
+                # TODO: orgnaize
     
     def convert_frames(self):
         frame_groups = (
