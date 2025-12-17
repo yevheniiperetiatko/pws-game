@@ -18,7 +18,7 @@ class AudioManager:
         else:
             print(f'Sound {name} is not found.')
 
-    def play_music(self, song_name, loop=True, volume=0.3):
+    def play_music(self, song_name, loop=True, volume=1):
         pygame.mixer.music.load(f'sounds/music/{song_name}')
         pygame.mixer.music.set_volume(volume)
         pygame.mixer.music.play(-1 if loop else 0)

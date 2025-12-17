@@ -14,6 +14,8 @@ from background import Background
 from wave_manager import WaveManager
 from audio_manager import AudioManager
 
+import time
+
 class Game():
     def __init__(self):
         pygame.init()
@@ -116,10 +118,11 @@ class Game():
 
     def loop(self):
         self.menu.run(self.crosshair)
+        time.sleep(0.5)
         self.clock.tick()
         self.wave_manager = WaveManager(self.background.rect.width, self.background.rect.height)
 
-        self.audio.play_music('fight hero.wav')
+        self.audio.play_music('fight hero.wav', volume=0.2)
 
         while self.running:
             # dt

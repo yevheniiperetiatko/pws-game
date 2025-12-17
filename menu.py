@@ -1,9 +1,12 @@
 import pygame
 import sys
 
+import time
+
 from ui import Button
 from animation import Animation
 from settings import *
+from audio_manager import AudioManager
 
 class Menu:
     def __init__(self, pygame):
@@ -40,8 +43,11 @@ class Menu:
         )
 
         self.buttons = (self.play_button, self.quit_button)
+        self.audio = AudioManager()
 
     def run(self, crosshair):
+        self.audio.play_music('main theme.wav', True, volume=0.4)
+        time.sleep(1.2)
         while True:
             events = pygame.event.get()   
             for event in events:
