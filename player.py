@@ -76,6 +76,13 @@ class Player(pygame.sprite.Sprite):
         return projectile
 
     def on_hit(self, enemy, audio, dt):
+        if self.state == 'dying':
+            return
+
+        self.speed -= 80
+        
+        # self.image = self.animation.get_sprite('on_hit', self.should_mirror)
+
         if not self.invulnerable:
             audio.play('witch_hurt')
 
@@ -93,7 +100,12 @@ class Player(pygame.sprite.Sprite):
             if self.invuln_timer <= 0:
                 self.invulnerable = False
         
-        if self.health <= 0: self.kill()
+        if self.health <= 0:
+            self.die()
+
+    def die(self):
+        self.state = 'dying'
+        self.death_start_time = pygame.time.get_ticks()
 
     def make_red(self, sprite):
         self.red_sprite = sprite.copy()
@@ -101,6 +113,9 @@ class Player(pygame.sprite.Sprite):
         self.image = self.red_sprite
 
     def move(self, dt):
+        if self.state == 'dying':
+            return
+
         if self.rect.y <= -1960:
             self.rect.y = -1960
 
@@ -115,17 +130,23 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.center += self.direction * self.speed * dt
 
-    def update(self, dt):        
+    def update(self, dt):
+        if self.state == 'dying':
+            if pygame.time.get_ticks() - self.death_start_time >= 2000:
+                self.kill()
+                return
+
         if self.mana <= 100:
             self.mana += 0.15
 
         self.input()
         self.move(dt)
-        
-        if self.direction == [0, 0]:
-            self.state = 'idle'
-        else:
-            self.state = 'walking'
+
+        if self.state != 'dying':    
+            if self.direction == [0, 0]:
+                self.state = 'idle'
+            else:
+                self.state = 'walking'
         
         if self.was_hit:
             self.make_red_duration -= dt
@@ -135,3 +156,5 @@ class Player(pygame.sprite.Sprite):
 
         if not self.was_hit:
             self.image = self.animation.get_sprite(self.state, self.should_mirror)
+
+        self.speed = PLAYER_SPEED

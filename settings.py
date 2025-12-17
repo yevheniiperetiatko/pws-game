@@ -69,7 +69,8 @@ game_state = 'menu'
 PLAYER_SPRITES = {
     'idle': load_frames("sprites/player/idle", PLAYER_SIZE),
     'walking': load_frames("sprites/player/walking", PLAYER_SIZE),
-    'dying': load_frames("sprites/slime/dying", PLAYER_SIZE),
+    'dying': load_frames("sprites/player/dying", PLAYER_SIZE),
+    'on_hit': load_frames("sprites/player/on_hit", PLAYER_SIZE)
 }
 
 ZOMBIE_SPRITES = {

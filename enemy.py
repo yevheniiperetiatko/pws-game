@@ -119,8 +119,9 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self, dt):
         if self.state == 'dying':
-            if pygame.time.get_ticks() - self.death_start_time >= 1450:
+            if pygame.time.get_ticks() - self.death_start_time >= 1500:
                 self.kill()
+                return
             
         if self.state != 'dying':
             self.move(dt)
