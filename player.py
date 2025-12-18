@@ -15,6 +15,8 @@ class Player(pygame.sprite.Sprite):
         self.name = 'player'
         self.state = "idle"
 
+        self.damage = 10
+
         self.animation = Animation(
             self.state,
             PLAYER_ANIMATION_SPEED,
@@ -40,6 +42,8 @@ class Player(pygame.sprite.Sprite):
 
         self.make_red_duration = 0
         self.was_hit = False
+
+        self.mana_regen = 0.25
 
     def input(self):
         self.keys = pygame.key.get_pressed()
@@ -68,7 +72,8 @@ class Player(pygame.sprite.Sprite):
             1500,
             self.rect.center,
             pygame.mouse.get_pos(),
-            groups.offset
+            groups.offset,
+            self.damage
         )
 
         self.mana -= 8
@@ -78,8 +83,8 @@ class Player(pygame.sprite.Sprite):
     def on_hit(self, enemy, audio, dt):
         if self.state == 'dying':
             return
-
-        self.speed -= 80
+        
+        self.temp_speed = self.speed - 80
         
         # self.image = self.animation.get_sprite('on_hit', self.should_mirror)
 
@@ -137,7 +142,7 @@ class Player(pygame.sprite.Sprite):
                 return
 
         if self.mana <= 100:
-            self.mana += 0.15
+            self.mana += self.mana_regen
 
         self.input()
         self.move(dt)
@@ -157,4 +162,4 @@ class Player(pygame.sprite.Sprite):
         if not self.was_hit:
             self.image = self.animation.get_sprite(self.state, self.should_mirror)
 
-        self.speed = PLAYER_SPEED
+        # self.speed = PLAYER_SPEED

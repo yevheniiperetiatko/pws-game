@@ -49,7 +49,7 @@ class Game():
         self.healthbar = HealthBar()
         self.manabar = ManaBar()
         self.watch = Watch()
-        self.shop = Shop(pygame, self.background)
+        self.shop = Shop(pygame, self.background, self.player, self.coin_counter)
 
         # TODO: reorganize
 
@@ -106,8 +106,6 @@ class Game():
                 self.player.coin_amount += 1
                 coin.kill()
 
-                # TODO: orgnaize
-    
     def convert_frames(self):
         frame_groups = (
             PLAYER_SPRITES,
@@ -161,7 +159,7 @@ class Game():
                 )
 
                 self.last_spawn_second = self.watch.seconds
-                self.enemies_amount += 2
+                self.enemies_amount += 1
             
             # spawn menu every n seconds
             if self.watch.total_seconds % 90 == 0 and self.watch.total_seconds != 0:

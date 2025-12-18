@@ -7,8 +7,9 @@ from settings import *
 from ui import Button
 
 class PowerUp:
-    def __init__(self, name, description, image_path, image_size, pos=(0,0)):
+    def __init__(self, name, description, image_path, cost, image_size, pos=(0,0)):
         self.name = name
+        self.cost = cost
         self.description = description
         self.original_image = pygame.transform.scale(
                         pygame.image.load(image_path).convert_alpha(),
@@ -35,14 +36,15 @@ class PowerUp:
         self.image = self.original_image
 
     def on_click(self):
-        # if self.name == "damage_boost":
-        #     PROJECTILE_DAMAGE = PROJECTILE_DAMAGE * 1.1
-        pass
-
+        return self.name
+        
 class Shop:
-    def __init__(self, pygame, background):
+    def __init__(self, pygame, background, player, coin_counter):
         self.pygame = pygame
         self.background = background
+        self.coin_counter = coin_counter
+
+        self.player = player
 
         self.display_surface = pygame.display.get_surface()
         self.image = pygame.image.load('sprites/shop_menu.png')        
@@ -57,27 +59,31 @@ class Shop:
         self.powerups = (
             PowerUp(
                 'damage_boost',
-                '+10% to your damage.',
+                '+30% to your damage.\n$35',
                 'sprites/powerups/damage_boost_icon.png',
+                35,
                 (220, 210),
             ),
             PowerUp(
                 "health_regeneration",
-                "Regenerate 100% of your health.",
+                "Regenerate 100% of your health.\n$35",
                 'sprites/powerups/health_boost_icon.png',
-                (220, 220)
+                35,
+                (220, 220),
             ),
             PowerUp(
                 "mana_regeneration",
-                '+10% to your mana regeneration.',
+                '+20% to your mana regeneration.\n$25',
                 'sprites/powerups/manaboost_icon.png',
+                25,
                 (220, 210)
             ),
             PowerUp (
                 "speed_boost",
-                '+15% to your speed.',
+                '+9% to your speed.\n$25',
                 'sprites/powerups/speed_boost_icon.png',
-                (220, 220)
+                25,
+                (220, 220),
             )
         )
 
@@ -114,8 +120,18 @@ class Shop:
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     for powerup in self.displayed_powerups:
                         if powerup.rect.collidepoint(pygame.mouse.get_pos()):
-                            powerup.on_click()
-                
+                            powerup_name = powerup.on_click()
+                            if not self.player.coin_amount - powerup.cost < 0:
+                                self.player.coin_amount -= powerup.cost
+                                if powerup_name == "damage_boost":
+                                    self.player.damage *= 1.3
+                                elif powerup_name == "speed_boost":
+                                    self.player.speed = self.player.speed * 1.09
+                                elif powerup_name == "health_regeneration":
+                                    self.player.health = 100
+                                elif powerup_name == "mana_regeneration":
+                                    self.player.mana_regen = self.player.mana_regen * 1.2
+
                 if self.exit_button.is_clicked(event):
                     closed = True
 
@@ -132,5 +148,7 @@ class Shop:
                 else:
                     powerup.not_hover(self.display_surface)
 
+            self.coin_counter.update(self.player.coin_amount)
+            self.coin_counter.draw()
             crosshair.draw()
             self.pygame.display.update()

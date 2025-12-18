@@ -6,11 +6,11 @@ from all_sprites import AllSprites
 from settings import *
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, groups, speed, start_pos, target_pos, offset):
+    def __init__(self, groups, speed, start_pos, target_pos, offset, damage):
         super().__init__(groups)
 
         self.speed = speed
-        self.damage = PROJECTILE_DAMAGE
+        self.damage = damage
     
         self.image = pygame.transform.scale(
             pygame.image.load('sprites/orb_projectile.png').convert_alpha(),
