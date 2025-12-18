@@ -44,7 +44,7 @@ class Menu:
 
         self.buttons = (self.play_button, self.quit_button)
         self.audio = AudioManager()
-
+        
     def run(self, crosshair):
         self.audio.play_music('main theme.wav', True, volume=0.4)
         time.sleep(1.2)

@@ -98,3 +98,9 @@ SLIME_SPRITES = {
 MENU_BACKGROUND_SPRITES = {
     'menu_background': load_frames("sprites/menu_background", (info.current_w, info.current_h))
 }
+
+# POWERUPS SPRITES
+DAMAGE_BOOST_IMG = pygame.transform.scale(
+                        pygame.image.load('sprites/powerups/damage_boost_icon.png'),
+                        (220, 210)
+                    )

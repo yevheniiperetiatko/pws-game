@@ -2,6 +2,20 @@ import pygame
 import sys
 
 from random import choice
+from settings import *
+
+class PowerUp:
+    def __init__(self, description, image_path, image_size, pos=(0,0)):
+        self.description = description
+        self.image = pygame.transform.scale(
+                        pygame.image.load(image_path).convert_alpha(),
+                        image_size
+                    )
+        self.pos = pos
+        self.rect = self.image.get_frect(topleft=self.pos)
+
+    def draw(self, display):
+        display.blit(self.image, self.rect)
 
 class Shop:
     def __init__(self, pygame):
@@ -15,36 +29,30 @@ class Shop:
         self.pos = (self.x, self.y)
         self.rect = self.image.get_frect(center=self.pos)
 
-        self.powerups = {
-            'damage_boost': (
-                "+10% to your damage.",
-                pygame.transform.scale(
-                    pygame.image.load('sprites/powerups/damage_boost_icon.png').convert_alpha(),
-                    (220, 210)
-                ),
+        self.powerups = (
+            PowerUp(
+                '+10% to your damage.',
+                'sprites/powerups/damage_boost_icon.png',
+                (220, 210),
             ),
-            'health_boost': (
+            PowerUp(
                 "Regenerate 100% of your health.",
-                pygame.transform.scale(
-                    pygame.image.load('sprites/powerups/health_boost_icon.png').convert_alpha(),
-                    (220, 220)
-                )
+                'sprites/powerups/health_boost_icon.png',
+                (220, 220)
             ),
-            'mana_boost': (
+            PowerUp (
                 '+10% to your mana regeneration.',
-                pygame.transform.scale(
-                    pygame.image.load('sprites/powerups/manaboost_icon.png').convert_alpha(),
-                    (220, 210)
-                )
+                'sprites/powerups/manaboost_icon.png',
+                (220, 210)
             ),
-            'speed_boost': (
+            PowerUp (
                 '+15% to your speed.',
-                pygame.transform.scale(
-                    pygame.image.load('sprites/powerups/speed_boost_icon.png').convert_alpha(),
-                    (220, 220)
-                )
+                'sprites/powerups/speed_boost_icon.png',
+                (220, 220)
             )
-        }
+        )
+
+        self.displayed_powerups = []
 
         self.items_positions = (
             (self.x-369, self.y-120),
@@ -52,22 +60,21 @@ class Shop:
             (self.x+152, self.y-120)
         )
 
-        self.current_powerups = None
-
-    def get_random_powerups(self):
-        current_powerups = []
-        for i in range(3):
-            current_powerups.append(
-                (
-                    self.powerups[choice(list(self.powerups.keys()))][1], 
-                    self.items_positions[i]
-                )
-            )
-
-        return current_powerups
+    def on_powerup_hover(self):
+        print('asdsad')
 
     def run(self, crosshair):
-        self.current_powerups = self.get_random_powerups()
+        for pos in self.items_positions:
+            random_powerup = None
+
+            while True:
+                random_powerup = choice(self.powerups)
+                if random_powerup in self.displayed_powerups:
+                    continue
+                break
+            
+            self.displayed_powerups.append(random_powerup)
+            random_powerup.rect.topleft = pos
 
         closed = False
         while not closed:
@@ -77,10 +84,10 @@ class Shop:
                     sys.exit()
 
             self.display_surface.blit(self.image, self.rect)
+            # self.powerups[0].draw(self.display_surface)
 
-            # display power ups
-            for i in range(3):
-                self.display_surface.blit(self.current_powerups[i][0], self.current_powerups[i][1])
+            for powerup in self.displayed_powerups:
+               powerup.draw(self.display_surface)
 
             crosshair.draw()
             self.pygame.display.update()
