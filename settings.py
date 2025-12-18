@@ -69,6 +69,8 @@ enemies_factor = 1
 # state
 game_state = 'menu'
 
+FONT_PATH = 'fonts/font.ttf'
+
 # SPRITES
 PLAYER_SPRITES = {
     'idle': load_frames("sprites/player/idle", PLAYER_SIZE),
@@ -98,9 +100,3 @@ SLIME_SPRITES = {
 MENU_BACKGROUND_SPRITES = {
     'menu_background': load_frames("sprites/menu_background", (info.current_w, info.current_h))
 }
-
-# POWERUPS SPRITES
-DAMAGE_BOOST_IMG = pygame.transform.scale(
-                        pygame.image.load('sprites/powerups/damage_boost_icon.png'),
-                        (220, 210)
-                    )

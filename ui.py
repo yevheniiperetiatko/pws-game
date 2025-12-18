@@ -1,11 +1,14 @@
 
 import pygame
 
+from settings import FONT_PATH
+
 pygame.init()
 
-FONT_PATH = 'fonts/font.ttf'
-money_amount_font = pygame.font.Font(FONT_PATH, 30)
-watch_time_font = pygame.font.Font(FONT_PATH, 50)
+font_path = FONT_PATH
+money_amount_font = pygame.font.Font(font_path, 30)
+watch_time_font = pygame.font.Font(font_path, 50)
+powerup_decription = pygame.font.Font(font_path, 50)
 
 class UIElement:
     def __init__(self, scale_size, pos, image_path=None):
@@ -41,7 +44,7 @@ class Button:
         self.color = color
 
         self.rect = pygame.FRect(pos[0], pos[1], self.width, self.height)
-        self.font = pygame.font.Font(FONT_PATH, self.text_size)
+        self.font = pygame.font.Font(font_path, self.text_size)
         
         self.display_surface = pygame.display.get_surface()
 
