@@ -13,6 +13,7 @@ from all_sprites import AllSprites
 from background import Background
 from wave_manager import WaveManager
 from audio_manager import AudioManager
+from shop import Shop
 
 import time
 
@@ -48,6 +49,7 @@ class Game():
         self.healthbar = HealthBar()
         self.manabar = ManaBar()
         self.watch = Watch()
+        self.shop = Shop(pygame)
 
         # TODO: reorganize
 
@@ -138,6 +140,7 @@ class Game():
                 
                 # if the player presses LMB spawn a projectile. shooting
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    self.shop.run(self.crosshair)
                     if self.player.state == 'dying':
                         continue
 
@@ -145,7 +148,7 @@ class Game():
                         projectile = self.player.shoot(self.all_sprites)
                         self.bullets.add(projectile)
 
-            # spawn every n seconds 
+            # spawn enemies every n seconds 
             if self.watch.seconds in (0, 20, 40, 60) and self.watch.seconds != self.last_spawn_second:
                 self.wave_manager.spawn_enemies(
                     self.all_sprites, 
@@ -156,6 +159,10 @@ class Game():
 
                 self.last_spawn_second = self.watch.seconds
                 self.enemies_amount += 2
+            
+            # spawn menu every n seconds
+            if self.watch.total_seconds % 90 == 0 and self.watch.total_seconds != 0:
+                self.shop.run()
 
             self.all_sprites.update(dt)
             self.coin_counter.update(self.player.coin_amount)

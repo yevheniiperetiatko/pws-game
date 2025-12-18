@@ -159,6 +159,7 @@ class Watch:
         
         self.minutes = 0
         self.seconds = 0
+        self.total_seconds = 0
 
         self.display_surface = pygame.display.get_surface()
         self.pos = (self.display_surface.width / 2.2, 50)
@@ -168,6 +169,7 @@ class Watch:
         
         self.minutes = int(self.time_elapsed // 60)
         self.seconds = int(self.time_elapsed % 60)
+        self.total_seconds = self.minutes * 60 + self.seconds
 
         if self.seconds >= 10:
             self.seconds_text = str(self.seconds)
