@@ -9,6 +9,7 @@ font_path = FONT_PATH
 money_amount_font = pygame.font.Font(font_path, 30)
 watch_time_font = pygame.font.Font(font_path, 50)
 powerup_decription = pygame.font.Font(font_path, 50)
+victory_title_font = pygame.font.Font(font_path, 100)
 
 class UIElement:
     def __init__(self, scale_size, pos, image_path=None):
@@ -24,6 +25,27 @@ class UIElement:
 
     def draw(self):
         self.display_surface.blit(self.image, self.pos)
+
+class VictoryTitle(UIElement):
+    def __init__(self):
+        super().__init__(
+            (400, 120),                 # size
+            (760, 120),                 # position (center-ish, adjust as needed)
+            "sprites/victory_title.png" # optional background image
+        )
+
+        self.text = "YOU WON!"
+        self.text_pos = (self.pos[0]-50, self.pos[1] + 35)
+
+    def draw(self):
+        victory_text = victory_title_font.render(
+            self.text,
+            True,
+            (255, 215, 0)  # gold color
+        )
+
+        self.display_surface.blit(self.image, self.pos)
+        self.display_surface.blit(victory_text, self.text_pos)
 
 
 class Button:

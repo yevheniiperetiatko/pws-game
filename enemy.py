@@ -4,6 +4,7 @@ import random
 
 from coin import Coin
 from animation import Animation
+from ui import VictoryTitle
 
 from settings import *
 
@@ -49,6 +50,9 @@ class Enemy(pygame.sprite.Sprite):
         elif self.name == 'slime':
             self.sprites_group = SLIME_SPRITES
             self.animation_speed = SLIME_ANIMATION_SPEED
+        elif self.name == 'boss':
+            self.sprites_group = BOSS_SPRITES
+            self.animation_speed = BOSS_ANIMATION_SPEED
 
         self.animation = Animation(
             self.state,
@@ -71,6 +75,8 @@ class Enemy(pygame.sprite.Sprite):
         self.death_start_time = 0
         self.can_move = True
 
+        self.alive = True
+
     def on_hit(self, bullet_damage, all_coins):
         if self.state == 'dying':
             return
@@ -83,6 +89,9 @@ class Enemy(pygame.sprite.Sprite):
         self.make_red(self.image) 
 
         if self.health <= 0:
+            if self.name == 'boss':
+                self.alive = False
+
             all_coins.add(Coin(self.groups, self.rect.center, self.groups.offset))
             self.state = 'dying'
             self.death_start_time = pygame.time.get_ticks()

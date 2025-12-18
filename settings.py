@@ -30,6 +30,7 @@ PLAYER_HEALTH = 100
 SLIME_HEALTH = 30
 SKELETON_HEALTH = 50 
 ZOMBIE_HEALTH = 65
+BOSS_HEALTH = 700
 
 # MANA
 PLAYER_MANA = 100
@@ -39,6 +40,7 @@ SLIME_DAMAGE = 5
 SKELETON_DAMAGE = 8 
 ZOMBIE_DAMAGE = 10
 PROJECTILE_DAMAGE = 10
+BOSS_DAMAGE = 30
 
 # cooldown after player takes damage
 INVULN_TIME = 0.3
@@ -49,6 +51,7 @@ SKELETON_ANIMATION_SPEED = 0.025
 ZOMBIE_ANIMATION_SPEED = 0.03
 SLIME_ANIMATION_SPEED = 0.03
 MENU_BACKGROUND_ANIMATION_SPEED = 0.01
+BOSS_ANIMATION_SPEED = 0.03
 
 # PLAYER WALKING SPEED
 PLAYER_SPEED = 400
@@ -58,6 +61,7 @@ PLAYER_SIZE = (80, 110)
 ZOMBIE_SIZE = (60, 80)
 SKELETON_SIZE = (60, 90)
 SLIME_SIZE = (75, 50)
+BOSS_SIZE = (300, 500)
 
 # enemy make red duration
 ENEMY_MAKE_RED_DURATION = 0.1
@@ -95,6 +99,12 @@ SLIME_SPRITES = {
     'idle': load_frames("sprites/slime/idle", SLIME_SIZE),
     'walking': load_frames("sprites/slime/walking", SLIME_SIZE),
     'dying': load_frames("sprites/slime/dying", SLIME_SIZE),
+}
+
+BOSS_SPRITES = {
+    'idle': load_frames("sprites/boss/idle", BOSS_SIZE),
+    'walking': load_frames('sprites/boss/walking', BOSS_SIZE),
+    'dying': load_frames('sprites/boss/dying', BOSS_SIZE)
 }
 
 MENU_BACKGROUND_SPRITES = {

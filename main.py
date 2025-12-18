@@ -50,6 +50,7 @@ class Game():
         self.manabar = ManaBar()
         self.watch = Watch()
         self.shop = Shop(pygame, self.background, self.player, self.coin_counter)
+        self.boss = None
 
         # TODO: reorganize
 
@@ -61,6 +62,10 @@ class Game():
         self.time_elapsed = 0
         self.enemies_amount = 3
         self.last_spawn_second = -1
+
+        self.boss = None
+
+        self.victory_title = VictoryTitle()
 
     def handle_enemies_colisions(self):
         collisions = pygame.sprite.groupcollide(self.enemies, self.enemies, False, False)
@@ -120,6 +125,7 @@ class Game():
                     frames[i] = frames[i].convert_alpha()
 
     def loop(self):
+        self.victory_played = False
         self.menu.run(self.crosshair)
         time.sleep(0.5)
         self.clock.tick()
@@ -161,6 +167,23 @@ class Game():
                 self.last_spawn_second = self.watch.seconds
                 self.enemies_amount += 1
             
+            # spawn boss
+            if self.watch.seconds == 10:
+                if self.boss == None:
+                    self.boss = Enemy(
+                        self.all_sprites,
+                        self.player,
+                        "boss.png",
+                        200,
+                        BOSS_HEALTH,
+                        BOSS_DAMAGE,
+                        BOSS_SIZE,
+                        'boss',
+                        (500, 500)
+                    )
+                    self.enemies.add(self.boss)
+                    self.audio.play_music('boss_fight.wav', volume=0.2)
+
             # spawn menu every n seconds
             if self.watch.total_seconds % 90 == 0 and self.watch.total_seconds != 0:
                 if self.shop_open == False:
@@ -190,6 +213,18 @@ class Game():
             self.healthbar.draw(self.player.health)
             self.manabar.draw(self.player.mana)
             self.watch.draw(dt)
+
+            # check if the boss dies
+            
+            if self.boss != None:
+                if self.boss.alive == False:
+                    self.victory_title.draw()
+                    
+                    if not self.victory_played:
+                        pygame.mixer.music.stop()
+                        self.audio.play_music('won.wav', volume=0.4)
+                        self.victory_played = True
+
 
             # collision between bullet and enemies
             self.handle_bullet_enemies_collision()
