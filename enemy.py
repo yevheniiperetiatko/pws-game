@@ -69,6 +69,7 @@ class Enemy(pygame.sprite.Sprite):
         self.make_red_duration = 0
 
         self.death_start_time = 0
+        self.can_move = True
 
     def on_hit(self, bullet_damage, all_coins):
         if self.state == 'dying':
@@ -123,7 +124,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.kill()
                 return
             
-        if self.state != 'dying':
+        if self.state != 'dying' and self.can_move:
             self.move(dt)
 
         if self.was_hit:

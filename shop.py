@@ -4,8 +4,11 @@ import sys
 from random import choice
 from settings import *
 
+from ui import Button
+
 class PowerUp:
-    def __init__(self, description, image_path, image_size, pos=(0,0)):
+    def __init__(self, name, description, image_path, image_size, pos=(0,0)):
+        self.name = name
         self.description = description
         self.original_image = pygame.transform.scale(
                         pygame.image.load(image_path).convert_alpha(),
@@ -31,9 +34,15 @@ class PowerUp:
     def not_hover(self, display_surface):
         self.image = self.original_image
 
+    def on_click(self):
+        # if self.name == "damage_boost":
+        #     PROJECTILE_DAMAGE = PROJECTILE_DAMAGE * 1.1
+        pass
+
 class Shop:
-    def __init__(self, pygame):
+    def __init__(self, pygame, background):
         self.pygame = pygame
+        self.background = background
 
         self.display_surface = pygame.display.get_surface()
         self.image = pygame.image.load('sprites/shop_menu.png')        
@@ -43,23 +52,29 @@ class Shop:
         self.pos = (self.x, self.y)
         self.rect = self.image.get_frect(center=self.pos)
 
+        self.exit_button = Button((self.x + 440, self.y-235), 50, 50, '', 0, (255, 0, 255))
+
         self.powerups = (
             PowerUp(
+                'damage_boost',
                 '+10% to your damage.',
                 'sprites/powerups/damage_boost_icon.png',
                 (220, 210),
             ),
             PowerUp(
+                "health_regeneration",
                 "Regenerate 100% of your health.",
                 'sprites/powerups/health_boost_icon.png',
                 (220, 220)
             ),
-            PowerUp (
+            PowerUp(
+                "mana_regeneration",
                 '+10% to your mana regeneration.',
                 'sprites/powerups/manaboost_icon.png',
                 (220, 210)
             ),
             PowerUp (
+                "speed_boost",
                 '+15% to your speed.',
                 'sprites/powerups/speed_boost_icon.png',
                 (220, 220)
@@ -75,6 +90,8 @@ class Shop:
         )
 
     def run(self, crosshair):
+        self.displayed_powerups = []
+
         for pos in self.items_positions:
             random_powerup = None
 
@@ -93,7 +110,16 @@ class Shop:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    for powerup in self.displayed_powerups:
+                        if powerup.rect.collidepoint(pygame.mouse.get_pos()):
+                            powerup.on_click()
+                
+                if self.exit_button.is_clicked(event):
+                    closed = True
 
+            self.display_surface.blit(self.background.image, self.background.rect)
 
             self.display_surface.blit(self.image, self.rect)
             for powerup in self.displayed_powerups:
@@ -105,7 +131,6 @@ class Shop:
                     powerup.on_hover(self.display_surface)
                 else:
                     powerup.not_hover(self.display_surface)
-
 
             crosshair.draw()
             self.pygame.display.update()

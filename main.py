@@ -49,7 +49,7 @@ class Game():
         self.healthbar = HealthBar()
         self.manabar = ManaBar()
         self.watch = Watch()
-        self.shop = Shop(pygame)
+        self.shop = Shop(pygame, self.background)
 
         # TODO: reorganize
 
@@ -129,6 +129,10 @@ class Game():
 
         self.audio.play_music('fight hero.wav', volume=0.2)
 
+        self.shop_open = False
+
+        dt_copy = 0
+
         while self.running:
             # dt
             dt = self.clock.tick(180) / 1000
@@ -140,7 +144,6 @@ class Game():
                 
                 # if the player presses LMB spawn a projectile. shooting
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    self.shop.run(self.crosshair)
                     if self.player.state == 'dying':
                         continue
 
@@ -162,7 +165,17 @@ class Game():
             
             # spawn menu every n seconds
             if self.watch.total_seconds % 90 == 0 and self.watch.total_seconds != 0:
-                self.shop.run()
+                if self.shop_open == False:
+                    for enemy in self.enemies:
+                        enemy.can_move = False
+                    dt_copy = dt
+                    self.shop_open = True
+                    self.shop.run(self.crosshair)
+                    dt = dt_copy
+            else:
+                self.shop_open = False
+                for enemy in self.enemies:
+                        enemy.can_move = True
 
             self.all_sprites.update(dt)
             self.coin_counter.update(self.player.coin_amount)
